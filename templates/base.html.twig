@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
-        <meta charset="UTF-8">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        <link rel="icon"
+              href="{{ asset('icons/favicon.ico') }}">
+
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
@@ -12,8 +15,92 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
+        <style>
+            body {
+                min-height: 75rem;
+                padding-top: 4.5rem;
+            }
+        </style>
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">SnowTricks</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Accueil</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                Les tricks
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#">Tous les tricks</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Grab</a></li>
+                                <li><a class="dropdown-item" href="#">Flat</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">C'est quoi SnowTricks ?</a>
+                        </li>
+                    </ul>
+                    {# Authentification #}
+                    {# ####################### #}
+                    <div class="d-flex navbar-nav">
+                        <div class="nav-item">
+                            <a href="#" class="nav-link">Connexion</a>
+                        </div>
+                        <div class="nav-item">
+                            <a href="#" class="nav-link">Inscription</a>
+                        </div>
+                    </div>
+                    {# ####################### #}
+
+
+                    {# User Profile #}
+                    {# ########################
+                    <div class="d-flex dropdown text-end">
+                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownAccount"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32"
+                                 class="rounded-circle">
+                        </a>
+                        <ul class="dropdown-menu text-small" aria-labelledby="dropdownAccount">
+                            <li><a class="dropdown-item" href="#">Mon compte</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Déconnexion</a></li>
+                        </ul>
+                    </div>
+                    ######################## #}
+                </div>
+            </div>
+        </nav>
+
+        <main class="{% block mainClasses %}container{% endblock %}">
+            {% block body %}{% endblock %}
+        </main>
+
+
+        <footer class="footer bg-dark navbar-dark mt-auto py-3 bg-light text-center ">
+            <div class="container d-flex justify-content-between">
+                <span class="link-light">SnowTricks - Tous droits réservés</span>
+                <div class="d-flex justify-content-between">
+                    <a href="#" class="me-2 link-light">Politique de confidentialité</a>
+                    <a href="#" class="link-light">Mentions légales</a>
+                </div>
+            </div>
+        </footer>
     </body>
 </html>

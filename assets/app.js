@@ -6,7 +6,13 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
+import './styles/bootstrap.min.css';
+import './styles/bootstrap-sketch.min.css';
 import './styles/app.css';
 
 // start the Stimulus application
-import './bootstrap';
+import './stimulus';
+
+// import bootstrap custom js
+import './bootstrap.bundle.min.js';
+import './bootstrap-custom';
