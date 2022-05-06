@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New TrickCategory{% endblock %}
+
+{% block body %}
+    <h1>Create new TrickCategory</h1>
+
+    {{ include('debug_trick_category/_form.html.twig') }}
+
+    <a href="{{ path('app_debug_trick_category_index') }}">back to list</a>
+{% endblock %}

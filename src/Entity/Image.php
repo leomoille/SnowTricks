@@ -23,15 +23,15 @@ class Image
     private $name;
 
     /**
-     * @ORM\Column(type="blob")
-     */
-    private $content;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="image")
      * @ORM\JoinColumn(nullable=false)
      */
     private $trick;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $content;
 
     public function getId(): ?int
     {
@@ -50,18 +50,6 @@ class Image
         return $this;
     }
 
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    public function setContent($content): self
-    {
-        $this->content = $content;
-
-        return $this;
-    }
-
     public function getTrick(): ?Trick
     {
         return $this->trick;
@@ -70,6 +58,18 @@ class Image
     public function setTrick(?Trick $trick): self
     {
         $this->trick = $trick;
+
+        return $this;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
 
         return $this;
     }

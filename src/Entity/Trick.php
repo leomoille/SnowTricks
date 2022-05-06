@@ -25,9 +25,9 @@ class Trick
     private $name;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", name="content")
      */
-    private $description;
+    private $content;
 
     /**
      * @ORM\OneToMany(targetEntity=Image::class, mappedBy="trick", orphanRemoval=true)
@@ -74,14 +74,14 @@ class Trick
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getContent(): ?string
     {
-        return $this->description;
+        return $this->content;
     }
 
-    public function setDescription(string $description): self
+    public function setContent(string $content): self
     {
-        $this->description = $description;
+        $this->content = $content;
 
         return $this;
     }
