@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les Tricks{% endblock %}
+
+{% block body %}
+    {% for trick in tricks %}
+        <p>{{ trick.name }}, {{ trick.trickCategory.name }}, {{ trick.content }}</p>
+    {% endfor %}
+{% endblock %}
+
+
+

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TrickCategory index{% endblock %}
+
+{% block body %}
+    <h1>TrickCategory index</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Number of trick in</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for trick_category in trick_categories %}
+            <tr>
+                <td>{{ trick_category.id }}</td>
+                <td>{{ trick_category.name }}</td>
+                <td>{{ trick_category.tricks | length }}</td>
+                </td>
+                <td>
+                    <a href="{{ path('app_debug_trick_category_show', {'id': trick_category.id}) }}">show</a>
+                    <a href="{{ path('app_debug_trick_category_edit', {'id': trick_category.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_debug_trick_category_new') }}">Create new</a>
+{% endblock %}
