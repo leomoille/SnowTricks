@@ -9,7 +9,9 @@
         <thead>
         <tr>
             <th>Id</th>
+            <th>Created at</th>
             <th>Name</th>
+            <th>Slug</th>
             <th>Category</th>
             <th>Content</th>
             <th>Image</th>
@@ -22,7 +24,9 @@
         {% for trick in tricks %}
             <tr>
                 <td>{{ trick.id }}</td>
+                <td>{{ trick.createdAt | date }}</td>
                 <td>{{ trick.name }}</td>
+                <td>{{ trick.slug }}</td>
                 <td>{{ trick.trickCategory.name }}</td>
                 <td>{{ trick.content }}</td>
                 <td>

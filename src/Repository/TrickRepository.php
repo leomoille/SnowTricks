@@ -45,6 +45,15 @@ class TrickRepository extends ServiceEntityRepository
         }
     }
 
+    public function findLastEntry(int $limit)
+    {
+        return $this->createQueryBuilder('trick')
+            ->addOrderBy('trick.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Trick[] Returns an array of Trick objects
     //  */

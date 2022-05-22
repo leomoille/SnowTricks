@@ -35,7 +35,9 @@ class DebugTrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $trick->setCreatedAt(new \DateTime());
             $trickRepository->add($trick);
+
             return $this->redirectToRoute('app_debug_trick_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -65,6 +67,7 @@ class DebugTrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $trickRepository->add($trick);
+
             return $this->redirectToRoute('app_debug_trick_index', [], Response::HTTP_SEE_OTHER);
         }
 
