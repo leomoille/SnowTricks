@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+{% form_theme trickForm 'bootstrap_5_layout.html.twig' %}
+
+{% block title %}
+    Ajouter une figure
+{% endblock %}
+
+{% block body %}
+    <h1>Ajouter un nouveau trick <span style="font-size: 0.5em;">Vas-y, sois pas timide !</span></h1>
+    {{ form_start(trickForm) }}
+    <div class="row mb-2">
+        <div class="form-group col-6">
+            <label for="trick_name">Nom</label>
+            {{ form_widget(trickForm.name) }}
+        </div>
+
+        <div class="form-group col-6">
+            <label for="trick_trickCategory">Catégorie</label>
+            {{ form_widget(trickForm.trickCategory) }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group mb-2 col-6">
+            <label for="">Ajoute des vidéos</label>
+            <div class="video"
+                 data-index="{{ trickForm.video|length > 0 ? trickForm.video|last.vars.name + 1 : 0 }}"
+                 data-prototype="{{ form_widget(trickForm.video.vars.prototype)|e('html_attr') }}">
+                {% for videoField in trickForm.video %}
+                    <div>
+                        {{ form_errors(videoField) }}
+                        {{ form_widget(videoField) }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group mb-2 col-6">
+            <label for="">Ajoute des images</label>
+            <div class="image"
+                 data-index="{{ trickForm.image|length > 0 ? trickForm.image|last.vars.name + 1 : 0 }}"
+                 data-prototype="{{ form_widget(trickForm.image.vars.prototype)|e('html_attr') }}">
+                {% for imageField in trickForm.image %}
+                    <div>
+                        {{ form_errors(imageField) }}
+                        {{ form_row(imageField) }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group mb-2">
+        <label for="trick_content">Contenu</label>
+        {{ form_widget(trickForm.content) }}
+    </div>
+
+    <button type="submit" class="btn btn-outline-primary">Ajouter mon trick !</button>
+
+    {{ form_end(trickForm) }}
+
+{% endblock %}
+

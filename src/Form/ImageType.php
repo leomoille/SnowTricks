@@ -3,9 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Image;
-use App\Entity\Trick;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,11 +14,7 @@ class ImageType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('content')
-            ->add('trick', EntityType::class, [
-                'class'        => Trick::class,
-                'choice_label' => 'name',
-            ]);
+            ->add('content', FileType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

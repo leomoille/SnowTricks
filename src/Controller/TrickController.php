@@ -2,12 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Trick;
 use App\Form\TrickSearchType;
+use App\Form\TrickType;
 use App\Repository\TrickCategoryRepository;
 use App\Repository\TrickRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class TrickController extends AbstractController
 {
@@ -20,34 +25,12 @@ class TrickController extends AbstractController
      */
     public function tricks(TrickRepository $trickRepository, TrickCategoryRepository $trickCategoryRepository): Response
     {
-        // NOTE: Est-ce la façon la plus propre de récupérer un ID pour faire une recherche ?
-        // TODO: Récupérer d'abord les catégories puis les figures | Utiliser un foreach !
-
         $lastTricks = $trickRepository->findLastEntry(3);
-
-        $lastGrabs = $trickRepository->findBy(
-            ['trickCategory' => $trickCategoryRepository->findOneBy(['name' => 'Grabs'])->getId()],
-            ['createdAt' => 'DESC'],
-            3
-        );
-        $lastSlides = $trickRepository->findBy(
-            ['trickCategory' => $trickCategoryRepository->findOneBy(['name' => 'Slides'])->getId()],
-            ['createdAt' => 'DESC'],
-            3
-        );
-        $lastBigAir = $trickRepository->findBy(
-            ['trickCategory' => $trickCategoryRepository->findOneBy(['name' => 'Big Air'])->getId()],
-            ['createdAt' => 'DESC'],
-            3
-        );
 
         $form = $this->createForm(TrickSearchType::class);
 
         return $this->render('trick/tricks.html.twig', [
             'lastTricks' => $lastTricks,
-            'grabs' => $lastGrabs,
-            'slides' => $lastSlides,
-            'bigair' => $lastBigAir,
             'searchForm' => $form->createView(),
         ]);
     }
@@ -60,5 +43,33 @@ class TrickController extends AbstractController
     public function trick(): Response
     {
         return $this->render('trick/trick.html.twig');
+    }
+
+    /**
+     * @Route("/trick/ajouter", name="app_add_trick")
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
+    public function addTrick(Request $request, EntityManagerInterface $manager): Response
+    {
+        $trick = new Trick();
+
+
+        $form = $this->createForm(TrickType::class, $trick);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $slugger = new AsciiSlugger();
+            $trick
+                ->setCreatedAt(new \DateTime())
+                ->setSlug($slugger->slug($trick->getName()));
+
+            $manager->persist($trick);
+            $manager->flush();
+        }
+
+        return $this->render('trick/addTrick.html.twig', ['trickForm' => $form->createView()]);
     }
 }

@@ -16,3 +16,6 @@ import './stimulus';
 // import bootstrap custom js
 import './bootstrap.bundle.min.js';
 import './bootstrap-custom';
+
+// form CollectionType
+import './add-collection-widget';
