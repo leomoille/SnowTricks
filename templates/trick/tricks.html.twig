@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 {% form_theme searchForm 'bootstrap_5_layout.html.twig' %}
 
-{% block title %}Les Tricks{% endblock %}
+{% block title %}
+    Les Tricks
+{% endblock %}
 
 {% block body %}
     <h1 class="text-center">Le dico' des tricks<br>
@@ -11,7 +13,9 @@
     <section class="mt-5 container">
         <div class="row">
             <div class="col-md-8">
-                <h2>Les dernières entrées <span style="font-size: 0.4em;">(soit pas timide, va jeter un œil)</span></h2>
+                <h2>Les dernières entrées
+                    <span style="font-size: 0.4em;">(soit pas timide, va jeter un œil)</span>
+                </h2>
             </div>
             <div class="col-md-4 text-end">
                 <a href="{{ path('app_add_trick') }}" class="btn btn-primary">Ajouter une figure !</a>
@@ -22,15 +26,30 @@
             {% for trick in lastTricks %}
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <div class="card mb-2" style="max-width: 600px;">
-                        <img class="img-fluid"
-                             style="object-fit: cover!important; max-height: 250px; border-radius: 2px 2px 0 0;"
-                             src="https://via.placeholder.com/1200x1200" alt="Accessibility">
+                        {% for image in trick.image|slice(0, 1) %}
+                            <img class="img-fluid"
+                                 style="object-fit: cover!important; max-height: 250px; border-radius: 2px 2px 0 0;"
+                                 src="{{ asset('/images/tricks/'~image.name) }}" alt="Accessibility">
+                        {% endfor %}
+
                         <div class="card-body">
-                            <h3 class="h5 card-title">{{ trick.name }}</h3>
-                            <h4 class="h6 card-subtitle mb-2 text-muted">{{ trick.trickCategory.name }}</h4>
+                            <div class="row">
+                                <div class="col-8">
+                                    <h3 class="h5 card-title">{{ trick.name }}</h3>
+                                    <h4 class="h6 card-subtitle mb-2 text-muted">{{ trick.trickCategory.name }}</h4>
+                                </div>
+                                <div class="col-4 align-self-center text-end">
+                                    <a href="{{ path('app_trick', {'slug': trick.slug}) }}"
+                                       class="display-6">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
                             <div>
+
                                 <button type="button" class="btn btn-outline-primary">
                                     <i class="bi bi-share"></i>
                                 </button>
@@ -79,14 +98,9 @@
         {#                <button class="btn btn-outline-primary">Filtrer</button> #}
         {#                <button class="btn btn-outline-secondary">Reset</button> #}
         {#            </form> #}
-        {#        </div> #}
-        {{ form_start(searchForm) }}
-        {{ form_row(searchForm.trickCategory, {'label': 'Catégories', 'attr': {'class': 'inline-checkbox'}}) }}
-        {{ form_end(searchForm) }}
+        {#        </div> #} {{ form_start(searchForm) }} {{ form_row(searchForm.trickCategory, {'label': 'Catégories', 'attr': {'class': 'inline-checkbox'}}
+        ) }} {{ form_end(searchForm) }}
 
     </section>
 
 {% endblock %}
-
-
-

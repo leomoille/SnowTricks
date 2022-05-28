@@ -36,6 +36,7 @@ class DebugMessageController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $messageRepository->add($message);
+
             return $this->redirectToRoute('app_debug_message_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -65,6 +66,7 @@ class DebugMessageController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $messageRepository->add($message);
+
             return $this->redirectToRoute('app_debug_message_index', [], Response::HTTP_SEE_OTHER);
         }
 

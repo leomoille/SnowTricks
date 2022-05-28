@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Image;
 use App\Entity\Trick;
 use App\Form\TrickSearchType;
 use App\Form\TrickType;
 use App\Repository\TrickCategoryRepository;
 use App\Repository\TrickRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,38 +38,73 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/tricks/{trickSlug}", name="app_trick")
+     * @Route("/tricks/{slug}", name="app_trick")
      *
+     * @param Trick $trick
      * @return Response
      */
-    public function trick(): Response
+    public function trick(Trick $trick): Response
     {
-        return $this->render('trick/trick.html.twig');
+        return $this->render('trick/trick.html.twig', [
+            'trick' => $trick,
+        ]);
     }
 
     /**
      * @Route("/trick/ajouter", name="app_add_trick")
+     * @Route("/trick/{slug}/edit", name="app_edit_trick")
      *
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @return Response
      */
-    public function addTrick(Request $request, EntityManagerInterface $manager): Response
+    public function addTrick(Trick $trick = null, Request $request, EntityManagerInterface $manager): Response
     {
-        $trick = new Trick();
-
+        if (!$trick) {
+            $trick = new Trick();
+        }
 
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $slugger = new AsciiSlugger();
-            $trick
-                ->setCreatedAt(new \DateTime())
-                ->setSlug($slugger->slug($trick->getName()));
+
+            if (!$trick->getId()) {
+                $trick->setCreatedAt(new DateTime());
+            }
+
+            $trick->setSlug($slugger->slug($trick->getName()));
 
             $manager->persist($trick);
+
+            foreach ($form['image'] as $image) {
+                $file = $image['content']->getData();
+
+                $extension = $file->guessExtension();
+                if (!$extension) {
+                    // extension cannot be guessed
+                    $extension = 'bin';
+                }
+                $fileName = md5(uniqid()).'.'.$extension;
+                $file->move($this->getParameter('trick_images_directory'), $fileName);
+
+                $trickImage = new Image();
+                $trickImage->setName($fileName);
+                $trick->addImage($trickImage);
+            }
+
+            foreach ($trick->getVideo() as $video) {
+                $manager->persist($video);
+            }
+
+            foreach ($trick->getImage() as $image) {
+                $manager->persist($image);
+            }
+
             $manager->flush();
+
+            return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()]);
         }
 
         return $this->render('trick/addTrick.html.twig', ['trickForm' => $form->createView()]);

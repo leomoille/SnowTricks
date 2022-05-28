@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Trick;
 use App\Entity\TrickCategory;
+use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\String\Slugger\AsciiSlugger;
@@ -87,7 +88,7 @@ class TrickFixtures extends Fixture
                     ->setSlug($slugger->slug(strtolower($item['name'])))
                     ->setContent($item['content'])
                     ->setTrickCategory($trickCategory)
-                    ->setCreatedAt(new \DateTime($date));
+                    ->setCreatedAt(new DateTime($date));
 
                 $manager->persist($trick);
             }

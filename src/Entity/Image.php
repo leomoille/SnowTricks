@@ -28,11 +28,6 @@ class Image
      */
     private $trick;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $content;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -58,18 +53,6 @@ class Image
     public function setTrick(?Trick $trick): self
     {
         $this->trick = $trick;
-
-        return $this;
-    }
-
-    public function getContent(): ?string
-    {
-        return $this->content;
-    }
-
-    public function setContent(string $content): self
-    {
-        $this->content = $content;
 
         return $this;
     }

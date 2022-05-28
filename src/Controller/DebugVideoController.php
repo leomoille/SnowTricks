@@ -36,6 +36,7 @@ class DebugVideoController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $videoRepository->add($video);
+
             return $this->redirectToRoute('app_debug_video_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -65,6 +66,7 @@ class DebugVideoController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $videoRepository->add($video);
+
             return $this->redirectToRoute('app_debug_video_index', [], Response::HTTP_SEE_OTHER);
         }
 

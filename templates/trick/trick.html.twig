@@ -1,10 +1,85 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-
-{% endblock %}
-
 {% block title %}
-
+    {{ trick.name }}
 {% endblock %}
 
+{% block body %}
+    <div class="row">
+        <div class="col-md-4 mb-3 border-end">
+            <h1>{{ trick.name }}</h1>
+            <p>
+                <span class="badge bg-info fs-6">{{ trick.trickCategory.name }}</span>
+                Ajoutée le {{ trick.createdAt | date('d/m/Y') }}
+            </p>
+            <hr>
+            <div class="accordion accordion-flush rounded-0" id="accordionTrickMedia">
+                <div class="accordion-item rounded-0">
+                    <h2 class="accordion-header rounded-0" id="headingTrickImage">
+                        <button class="accordion-button collapsed rounded-0" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapseTrickImage"
+                                aria-expanded="true" aria-controls="collapseTrickImage">
+                            Images
+                        </button>
+                    </h2>
+                    <div id="collapseTrickImage" class="accordion-collapse collapse"
+                         aria-labelledby="headingTrickImage" data-bs-parent="#accordionTrickMedia">
+                        <div class="accordion-body">
+                            {% if trick.image is not empty %}
+                                {% for image in trick.image %}
+                                    <img class="img-fluid"
+                                         src="{{ asset('/images/tricks/'~image.name) }}" alt="">
+                                {% endfor %}
+                            {% else %}
+                                <p>Aucune image !</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item  rounded-0">
+                    <h2 class="accordion-header rounded-0" id="headingTrickVideo">
+                        <button class="accordion-button collapsed rounded-0" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapseTrickVideo"
+                                aria-expanded="true" aria-controls="collapseTrickVideo">
+                            Vidéos
+                        </button>
+                    </h2>
+                    <div id="collapseTrickVideo" class="accordion-collapse collapse"
+                         aria-labelledby="headingTrickVideo" data-bs-parent="#accordionTrickMedia">
+                        <div class="accordion-body">
+                            {% if trick.video is not empty %}
+                                {% for video in trick.video %}
+                                    <img class="img-fluid"
+                                         src="{{ asset('/images/tricks/'~video.name) }}" alt="">
+                                {% endfor %}
+                            {% else %}
+                                <p>Aucune vidéo !</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="btn-group w-100" role="group" aria-label="Basic example">
+                <a href="{{ path('app_edit_trick', {"slug": trick.slug}) }}" type="button"
+                   class="btn btn-info">Éditer</a>
+                <button type="button" class="btn btn-danger">Supprimer</button>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <p>{{ trick.content | markdown_to_html }}</p>
+                    </div>
+                    <div class="col-12">
+                        <hr>
+                        <h2>Les commentaires !</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

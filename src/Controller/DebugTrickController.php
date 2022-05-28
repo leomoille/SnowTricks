@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Trick;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,7 +36,7 @@ class DebugTrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $trick->setCreatedAt(new \DateTime());
+            $trick->setCreatedAt(new DateTime());
             $trickRepository->add($trick);
 
             return $this->redirectToRoute('app_debug_trick_index', [], Response::HTTP_SEE_OTHER);

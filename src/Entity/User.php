@@ -23,35 +23,30 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
+     * @Assert\EqualTo(propertyPath="password", message="Vous devez entrer le même mot de passe")
+     */
+    public $confirm_password;
+    /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
-
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\Email()
      */
     private $email;
-
     /**
      * @ORM\Column(type="json")
      */
     private $roles = [];
-
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      * @Assert\Length(min="8", minMessage="Votre mot de passe doit contenir au minimum 8 caractères")
      */
     private $password;
-
-    /**
-     * @Assert\EqualTo(propertyPath="password", message="Vous devez entrer le même mot de passe")
-     */
-    public $confirm_password;
-
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -90,6 +85,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUsername(): string
     {
         return (string) $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
     }
 
     /**
@@ -144,12 +146,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    public function setUsername(string $username): self
-    {
-        $this->username = $username;
-
-        return $this;
     }
 }

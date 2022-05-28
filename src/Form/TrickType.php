@@ -6,6 +6,7 @@ use App\Entity\Trick;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,7 +17,7 @@ class TrickType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('content')
+            ->add('content', TextareaType::class)
             ->add('video', CollectionType::class, [
                 'entry_type' => VideoType::class,
                 'entry_options' => ['label' => false],
@@ -24,6 +25,7 @@ class TrickType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
+                'mapped' => false,
             ])
             ->add('image', CollectionType::class, [
                 'entry_type' => ImageType::class,
@@ -32,6 +34,7 @@ class TrickType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
+                'mapped' => false,
             ])
             ->add('trickCategory', EntityType::class, [
                 'class' => 'App\Entity\TrickCategory',
