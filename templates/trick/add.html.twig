@@ -23,30 +23,12 @@
     <div class="row">
         <div class="form-group mb-2 col-6">
             <label for="">Ajoute des vidéos</label>
-            <div class="video"
-                 data-index="{{ trickForm.video|length > 0 ? trickForm.video|last.vars.name + 1 : 0 }}"
-                 data-prototype="{{ form_widget(trickForm.video.vars.prototype)|e('html_attr') }}">
-                {% for videoField in trickForm.video %}
-                    <div>
-                        {{ form_errors(videoField) }}
-                        {{ form_widget(videoField) }}
-                    </div>
-                {% endfor %}
-            </div>
+            {{ form_widget(trickForm.video) }}
         </div>
 
         <div class="form-group mb-2 col-6">
             <label for="">Ajoute des images</label>
-            <div class="image"
-                 data-index="{{ trickForm.image|length > 0 ? trickForm.image|last.vars.name + 1 : 0 }}"
-                 data-prototype="{{ form_widget(trickForm.image.vars.prototype)|e('html_attr') }}">
-                {% for imageField in trickForm.image %}
-                    <div>
-                        {{ form_errors(imageField) }}
-                        {{ form_row(imageField) }}
-                    </div>
-                {% endfor %}
-            </div>
+            {{ form_widget(trickForm.image) }}
         </div>
     </div>
 

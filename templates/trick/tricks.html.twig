@@ -29,7 +29,7 @@
                         {% for image in trick.image|slice(0, 1) %}
                             <img class="img-fluid"
                                  style="object-fit: cover!important; max-height: 250px; border-radius: 2px 2px 0 0;"
-                                 src="{{ asset('/images/tricks/'~image.name) }}" alt="Accessibility">
+                                 src="{{ asset('/uploads/images/tricks/'~image.name) }}" alt="Accessibility">
                         {% endfor %}
 
                         <div class="card-body">

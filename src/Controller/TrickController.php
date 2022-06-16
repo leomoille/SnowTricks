@@ -6,11 +6,11 @@ use App\Entity\Image;
 use App\Entity\Trick;
 use App\Form\TrickSearchType;
 use App\Form\TrickType;
-use App\Repository\TrickCategoryRepository;
 use App\Repository\TrickRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,10 +22,9 @@ class TrickController extends AbstractController
      * @Route("/tricks", name="app_tricks")
      *
      * @param TrickRepository $trickRepository
-     * @param TrickCategoryRepository $trickCategoryRepository
      * @return Response
      */
-    public function tricks(TrickRepository $trickRepository, TrickCategoryRepository $trickCategoryRepository): Response
+    public function tricks(TrickRepository $trickRepository): Response
     {
         $lastTricks = $trickRepository->findLastEntry(3);
 
@@ -52,61 +51,114 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/trick/ajouter", name="app_add_trick")
-     * @Route("/trick/{slug}/edit", name="app_edit_trick")
      *
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @return Response
      */
-    public function addTrick(Trick $trick = null, Request $request, EntityManagerInterface $manager): Response
+    public function add(Request $request, EntityManagerInterface $manager): Response
     {
-        if (!$trick) {
-            $trick = new Trick();
-        }
+        $trick = new Trick();
 
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $images = $form->get('image')->getData();
+
+            foreach ($images as $image) {
+                $file = md5(uniqid()).'.'.$image->guessExtension();
+                $image->move(
+                    $this->getParameter('trick_images_directory'),
+                    $file
+                );
+
+                $img = new Image();
+                $img->setName($file);
+
+                $trick->addImage($img);
+            }
+
             $slugger = new AsciiSlugger();
 
-            if (!$trick->getId()) {
-                $trick->setCreatedAt(new DateTime());
-            }
-
+            $trick->setCreatedAt(new DateTime());
             $trick->setSlug($slugger->slug($trick->getName()));
-
             $manager->persist($trick);
-
-            foreach ($form['image'] as $image) {
-                $file = $image['content']->getData();
-
-                $extension = $file->guessExtension();
-                if (!$extension) {
-                    // extension cannot be guessed
-                    $extension = 'bin';
-                }
-                $fileName = md5(uniqid()).'.'.$extension;
-                $file->move($this->getParameter('trick_images_directory'), $fileName);
-
-                $trickImage = new Image();
-                $trickImage->setName($fileName);
-                $trick->addImage($trickImage);
-            }
-
-            foreach ($trick->getVideo() as $video) {
-                $manager->persist($video);
-            }
-
-            foreach ($trick->getImage() as $image) {
-                $manager->persist($image);
-            }
 
             $manager->flush();
 
             return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()]);
         }
 
-        return $this->render('trick/addTrick.html.twig', ['trickForm' => $form->createView()]);
+        return $this->render('trick/add.html.twig', [
+                'trickForm' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/trick/{slug}/edit", name="app_edit_trick", methods={"GET", "POST"})
+     */
+    public function edit(Request $request, Trick $trick, TrickRepository $trickRepository): Response
+    {
+        $form = $this->createForm(TrickType::class, $trick);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $images = $form->get('image')->getData();
+
+            foreach ($images as $image) {
+                $file = md5(uniqid()).'.'.$image->guessExtension();
+                $image->move(
+                    $this->getParameter('trick_images_directory'),
+                    $file
+                );
+
+                $img = new Image();
+                $img->setName($file);
+
+                $trick->addImage($img);
+            }
+            $trickRepository->add($trick);
+
+            return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('trick/edit.html.twig', [
+            'trick' => $trick,
+            'trickForm' => $form,
+        ]);
+    }
+
+    /**
+     * @Route("/trick/{slug}", name="app_delete_trick", methods={"POST"})
+     */
+    public function delete(Request $request, Trick $trick, TrickRepository $trickRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$trick->getId(), $request->request->get('_token'))) {
+            $trickRepository->remove($trick);
+        }
+
+        return $this->redirectToRoute('app_tricks', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/remove/image/{id}", name="app_delete_trick_image", methods={"DELETE"})
+     */
+    public function deleteImage(Image $image, Request $request, EntityManagerInterface $manager)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if ($this->isCsrfTokenValid('delete'.$image->getId(), $data['_token'])) {
+            $fileName = $image->getName();
+            unlink($this->getParameter('trick_images_directory').'/'.$fileName);
+
+            $manager->remove($image);
+            $manager->flush();
+
+            return new JsonResponse(['success' => 1]);
+        } else {
+            return new JsonResponse(['error' => 'Token Invalide'], 400);
+        }
     }
 }

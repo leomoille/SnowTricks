@@ -28,6 +28,8 @@ class Image
      */
     private $trick;
 
+    private $content;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -55,5 +57,21 @@ class Image
         $this->trick = $trick;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param mixed $content
+     */
+    public function setContent($content): void
+    {
+        $this->content = $content;
     }
 }

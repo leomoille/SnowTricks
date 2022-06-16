@@ -19,3 +19,5 @@ import './bootstrap-custom';
 
 // form CollectionType
 import './add-collection-widget';
+
+import './imageDelete';

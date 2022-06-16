@@ -28,7 +28,7 @@
                             {% if trick.image is not empty %}
                                 {% for image in trick.image %}
                                     <img class="img-fluid"
-                                         src="{{ asset('/images/tricks/'~image.name) }}" alt="">
+                                         src="{{ asset('/uploads/images/tricks/'~image.name) }}" alt="">
                                 {% endfor %}
                             {% else %}
                                 <p>Aucune image !</p>
@@ -63,7 +63,7 @@
             <hr>
             <div class="btn-group w-100" role="group" aria-label="Basic example">
                 <a href="{{ path('app_edit_trick', {"slug": trick.slug}) }}" type="button"
-                   class="btn btn-info">Éditer</a>
+                   class="btn btn-primary">Éditer</a>
                 <button type="button" class="btn btn-danger">Supprimer</button>
             </div>
         </div>
@@ -71,7 +71,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <p>{{ trick.content | markdown_to_html }}</p>
+                        <p>{{ trick.content }}</p>
                     </div>
                     <div class="col-12">
                         <hr>
