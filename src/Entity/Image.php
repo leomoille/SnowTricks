@@ -28,9 +28,6 @@ class Image
      */
     private $trick;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $content;
 
     public function getId(): ?int
@@ -62,15 +59,19 @@ class Image
         return $this;
     }
 
-    public function getContent(): ?string
+    /**
+     * @return mixed
+     */
+    public function getContent()
     {
         return $this->content;
     }
 
-    public function setContent(string $content): self
+    /**
+     * @param mixed $content
+     */
+    public function setContent($content): void
     {
         $this->content = $content;
-
-        return $this;
     }
 }

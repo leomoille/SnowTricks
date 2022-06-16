@@ -7,18 +7,18 @@
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ message.id }}</td>
-            </tr>
-            <tr>
-                <th>Content</th>
-                <td>{{ message.content }}</td>
-            </tr>
-            <tr>
-                <th>PublicationDate</th>
-                <td>{{ message.publicationDate ? message.publicationDate|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <td>{{ message.id }}</td>
+        </tr>
+        <tr>
+            <th>Content</th>
+            <td>{{ message.content }}</td>
+        </tr>
+        <tr>
+            <th>PublicationDate</th>
+            <td>{{ message.publicationDate ? message.publicationDate|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
         </tbody>
     </table>
 

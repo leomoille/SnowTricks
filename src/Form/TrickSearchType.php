@@ -2,26 +2,30 @@
 
 namespace App\Form;
 
-use App\Entity\Image;
+use App\Entity\Trick;
+use App\Entity\TrickCategory;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ImageType extends AbstractType
+class TrickSearchType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('content', FileType::class, [
-                'required' => false,
+            ->add('trickCategory', EntityType::class, [
+                'class' => TrickCategory::class,
+                'choice_label' => 'name',
+                'expanded' => true,
+                'multiple' => true,
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Image::class,
+            'data_class' => Trick::class,
         ]);
     }
 }

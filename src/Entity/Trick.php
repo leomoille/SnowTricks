@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TrickRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,19 +31,19 @@ class Trick
     private $content;
 
     /**
-     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="trick", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
      */
     private $image;
 
     /**
-     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", cascade={"persist"})
      */
     private $video;
 
     /**
      * @ORM\OneToMany(targetEntity=Message::class, mappedBy="trick")
      */
-    private $Message;
+    private $message;
 
     /**
      * @ORM\ManyToOne(targetEntity=TrickCategory::class, inversedBy="tricks")
@@ -50,11 +51,21 @@ class Trick
      */
     private $trickCategory;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
+
     public function __construct()
     {
         $this->image = new ArrayCollection();
         $this->video = new ArrayCollection();
-        $this->Message = new ArrayCollection();
+        $this->message = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -151,13 +162,13 @@ class Trick
      */
     public function getMessage(): Collection
     {
-        return $this->Message;
+        return $this->message;
     }
 
     public function addMessage(Message $message): self
     {
-        if (!$this->Message->contains($message)) {
-            $this->Message[] = $message;
+        if (!$this->message->contains($message)) {
+            $this->message[] = $message;
             $message->setTrick($this);
         }
 
@@ -166,7 +177,7 @@ class Trick
 
     public function removeMessage(Message $message): self
     {
-        if ($this->Message->removeElement($message)) {
+        if ($this->message->removeElement($message)) {
             // set the owning side to null (unless already changed)
             if ($message->getTrick() === $this) {
                 $message->setTrick(null);
@@ -184,6 +195,30 @@ class Trick
     public function setTrickCategory(?TrickCategory $trickCategory): self
     {
         $this->trickCategory = $trickCategory;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTimeInterface $CreatedAt): self
+    {
+        $this->createdAt = $CreatedAt;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

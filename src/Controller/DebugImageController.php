@@ -36,6 +36,7 @@ class DebugImageController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $imageRepository->add($image);
+
             return $this->redirectToRoute('app_debug_image_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -65,6 +66,7 @@ class DebugImageController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $imageRepository->add($image);
+
             return $this->redirectToRoute('app_debug_image_index', [], Response::HTTP_SEE_OTHER);
         }
 

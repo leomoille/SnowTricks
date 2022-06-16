@@ -36,6 +36,7 @@ class DebugTrickCategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $trickCategoryRepository->add($trickCategory);
+
             return $this->redirectToRoute('app_debug_trick_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -58,13 +59,17 @@ class DebugTrickCategoryController extends AbstractController
     /**
      * @Route("/{id}/edit", name="app_debug_trick_category_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, TrickCategory $trickCategory, TrickCategoryRepository $trickCategoryRepository): Response
-    {
+    public function edit(
+        Request $request,
+        TrickCategory $trickCategory,
+        TrickCategoryRepository $trickCategoryRepository
+    ): Response {
         $form = $this->createForm(TrickCategoryType::class, $trickCategory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $trickCategoryRepository->add($trickCategory);
+
             return $this->redirectToRoute('app_debug_trick_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -77,8 +82,11 @@ class DebugTrickCategoryController extends AbstractController
     /**
      * @Route("/{id}", name="app_debug_trick_category_delete", methods={"POST"})
      */
-    public function delete(Request $request, TrickCategory $trickCategory, TrickCategoryRepository $trickCategoryRepository): Response
-    {
+    public function delete(
+        Request $request,
+        TrickCategory $trickCategory,
+        TrickCategoryRepository $trickCategoryRepository
+    ): Response {
         if ($this->isCsrfTokenValid('delete'.$trickCategory->getId(), $request->request->get('_token'))) {
             $trickCategoryRepository->remove($trickCategory);
         }
