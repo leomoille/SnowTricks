@@ -65,7 +65,7 @@
                 </div>
             </div>
             <hr>
-            <form class="btn-group w-100" method="post" action="{{ path('app_debug_trick_delete', {'id': trick.id}) }}"
+            <form class="btn-group w-100" method="post" action="{{ path('app_delete_trick', {'slug': trick.slug}) }}"
                   onsubmit="return confirm('Tu es vraiment sûr(e) de vouloir supprimer ce trick ?!');">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
                 <a href="{{ path('app_edit_trick', {"slug": trick.slug}) }}" type="button"

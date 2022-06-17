@@ -1,5 +1,0 @@
-<form method="post" action="{{ path('app_debug_trick_category_delete', {'id': trick_category.id}) }}"
-      onsubmit="return confirm('Are you sure you want to delete this item?');">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick_category.id) }}">
-    <button class="btn">Delete</button>
-</form>

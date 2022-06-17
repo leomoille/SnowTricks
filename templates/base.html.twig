@@ -59,21 +59,6 @@
                     <a class="nav-link active" aria-current="page" href="{{ path('app_about') }}">C'est quoi SnowTricks
                         ?</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        Debug
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{{ path('app_debug_trick_index') }}">Trick</a></li>
-                        <li><a class="dropdown-item"
-                               href="{{ path('app_debug_trick_category_index') }}">TrickCategory</a>
-                        <li><a class="dropdown-item" href="{{ path('app_debug_image_index') }}">Image</a>
-                        <li><a class="dropdown-item" href="{{ path('app_debug_video_index') }}">Video</a>
-                        <li><a class="dropdown-item" href="{{ path('app_debug_message_index') }}">Message</a>
-                        </li>
-                    </ul>
-                </li>
             </ul>
 
             {% if not app.user %}
@@ -110,7 +95,7 @@
 </main>
 
 
-<footer class="footer bg-dark navbar-dark mt-auto py-3 bg-light text-center ">
+<footer class="footer bg-dark navbar-dark mt-5 py-3 bg-light text-center ">
     <div class="container d-flex justify-content-between">
         <span class="link-light">SnowTricks - Tous droits réservés</span>
         <div class="d-flex justify-content-between">
