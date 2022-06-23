@@ -4,10 +4,13 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationType;
+use App\Form\ResetPasswordType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -54,5 +57,48 @@ class SecurityController extends AbstractController
      */
     public function logout()
     {
+    }
+
+    /**
+     * @Route("/mot-de-passe-oublie", name="security_forgot_password", methods="GET|POST")
+     */
+    public function forgotPassword(Request $request, MailerInterface $mailer): Response
+    {
+        $form = $this->createForm(ResetPasswordType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            dump($form->getData()['email']);
+
+            if ($form->getData()['email'] == $form->getData()['confirmEmail']) {
+                $this->addFlash(
+                    'notice',
+                    'Top, tu vas bientôt pouvoir retrouver ton compte !'
+                );
+                $email = (new Email())
+                    ->to('you@example.com')
+                    // ->cc('cc@example.com')
+                    // ->bcc('bcc@example.com')
+                    // ->replyTo('fabien@example.com')
+                    // ->priority(Email::PRIORITY_HIGH)
+                    ->subject('Time for Symfony Mailer!')
+                    ->text('Sending emails is fun again!')
+                    ->html('<p>See Twig integration for better HTML integration!</p>');
+
+                $mailer->send($email);
+            } else {
+                if ($form->getData()['email'] != $form->getData()['confirmEmail']) {
+                    $this->addFlash(
+                        'warning',
+                        'Les deux mails ne correspondent pas...'
+                    );
+                }
+            }
+        }
+
+        return $this->render('security/forgot-password.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }
