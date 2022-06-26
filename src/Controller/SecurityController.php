@@ -6,11 +6,11 @@ use App\Entity\User;
 use App\Form\RegistrationType;
 use App\Form\ResetPasswordType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -60,7 +60,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/mot-de-passe-oublie", name="security_forgot_password", methods="GET|POST")
+     * @Route("/mot-de-passe-oublie", name="security_forgot_password")
      */
     public function forgotPassword(Request $request, MailerInterface $mailer): Response
     {
@@ -76,16 +76,20 @@ class SecurityController extends AbstractController
                     'notice',
                     'Top, tu vas bientôt pouvoir retrouver ton compte !'
                 );
-                $email = (new Email())
+                $email = (new TemplatedEmail())
+                    ->from('no-reply@snowtricks.dev')
                     ->to('you@example.com')
-                    // ->cc('cc@example.com')
-                    // ->bcc('bcc@example.com')
-                    // ->replyTo('fabien@example.com')
-                    // ->priority(Email::PRIORITY_HIGH)
-                    ->subject('Time for Symfony Mailer!')
-                    ->text('Sending emails is fun again!')
-                    ->html('<p>See Twig integration for better HTML integration!</p>');
+                    ->subject('Mot de passe oublié ?')
+                    ->htmlTemplate('email/password-recovery.html.twig')
+                    ->context([
+                        'username' => 'Léo',
+                    ]);
 
+                /*
+                $dsn = 'smtp://0.0.0.0:1025';
+                $transport = Transport::fromDsn($dsn);
+                $mailer = new Mailer($transport);
+                 */
                 $mailer->send($email);
             } else {
                 if ($form->getData()['email'] != $form->getData()['confirmEmail']) {
