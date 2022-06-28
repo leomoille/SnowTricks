@@ -47,6 +47,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\Length(min="8", minMessage="Votre mot de passe doit contenir au minimum 8 caractères")
      */
     private $password;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $resetToken;
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -146,5 +152,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    /**
+     * @param mixed $resetToken
+     */
+    public function setResetToken(?string $resetToken): self
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
     }
 }
