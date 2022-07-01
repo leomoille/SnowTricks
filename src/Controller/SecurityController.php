@@ -26,7 +26,9 @@ class SecurityController extends AbstractController
     public function registration(
         Request $request,
         EntityManagerInterface $manager,
-        UserPasswordHasherInterface $encoder
+        UserPasswordHasherInterface $encoder,
+        TokenGeneratorInterface $tokenGenerator,
+        MailerInterface $mailer
     ): Response {
         $user = new User();
 
@@ -37,8 +39,31 @@ class SecurityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $hash = $encoder->hashPassword($user, $user->getPassword());
             $user->setPassword($hash);
+
+            $token = $tokenGenerator->generateToken();
+            $user->setActivationToken($token);
+            $user->setIsActivated(false);
+
             $manager->persist($user);
             $manager->flush();
+
+            $url = $this->generateUrl(
+                'security_activate_account',
+                ['token' => $token],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+
+            $email = (new TemplatedEmail())
+                ->from('no-reply@snowtricks.dev')
+                ->to($user->getEmail())
+                ->subject('Activation du compte')
+                ->htmlTemplate('email/account-activation.html.twig')
+                ->context([
+                    'url' => $url,
+                    'user' => $user,
+                ]);
+
+            $mailer->send($email);
 
             return $this->redirectToRoute('security_login');
         }
@@ -46,6 +71,34 @@ class SecurityController extends AbstractController
         return $this->render('security/registration.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/inscription/{token}", name="security_activate_account")
+     */
+    public function activateAccount(
+        string $token,
+        Request $request,
+        UserRepository $userRepository,
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $passwordHasher
+    ): Response {
+        $user = $userRepository->findOneByActivationToken($token);
+
+        if ($user) {
+            $user->setIsActivated(true);
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Ton compte à bien été activé, bienvenue !');
+
+            return $this->redirectToRoute('security_login');
+        }
+
+        $this->addFlash('warning', 'Jeton invalide');
+
+        return $this->redirectToRoute('app_home');
     }
 
     /**

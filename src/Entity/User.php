@@ -40,16 +40,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private array $roles = [];
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      * @Assert\Length(min="8", minMessage="Votre mot de passe doit contenir au minimum 8 caractères")
      */
-    private $password;
+    private string $password;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $resetToken;
 
@@ -57,6 +57,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $username;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isActivated;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $activationToken;
 
     public function getId(): ?int
     {
@@ -168,6 +178,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setResetToken(?string $resetToken): self
     {
         $this->resetToken = $resetToken;
+
+        return $this;
+    }
+
+    public function getIsActivated(): ?bool
+    {
+        return $this->isActivated;
+    }
+
+    public function setIsActivated(bool $isActivated): self
+    {
+        $this->isActivated = $isActivated;
+
+        return $this;
+    }
+
+    public function getActivationToken(): ?string
+    {
+        return $this->activationToken;
+    }
+
+    public function setActivationToken(string $activationToken): self
+    {
+        $this->activationToken = $activationToken;
 
         return $this;
     }
