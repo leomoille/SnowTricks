@@ -1,0 +1,14 @@
+{% apply inline_css(source('@styles/bootstrap.min.css')) %}
+    <h1>Bienvenue {{ user.username }}</h1>
+
+    <p>
+        Active ton compte pour obtenir un accès à l'ajout, la modification et la suppression de tricks :<br>
+        <a href="{{ url|raw }}">{{ url|raw }}</a>
+    </p>
+    <p>
+        En plus de çaa, tu pourras également discuter dans la partie Message de chacune des figures, c'est pas beau ça ?
+    </p>
+
+
+    <p>L'équipe de SnowTricks.</p>
+{% endapply %}
