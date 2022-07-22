@@ -68,7 +68,7 @@ class TrickController extends AbstractController
                 );
 
                 $img = new Image();
-                $img->setName($file);
+                $img->setFilename($file);
 
                 $trick->addImage($img);
             }
@@ -153,7 +153,7 @@ class TrickController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['_token'])) {
-            $fileName = $image->getName();
+            $fileName = $image->getFilename();
             unlink($this->getParameter('trick_images_directory') . '/' . $fileName);
 
             $manager->remove($image);
