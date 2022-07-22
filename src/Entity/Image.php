@@ -28,6 +28,11 @@ class Image
      */
     private $trick;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isFeatured;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -53,6 +58,18 @@ class Image
     public function setTrick(?Trick $trick): self
     {
         $this->trick = $trick;
+
+        return $this;
+    }
+
+    public function isIsFeatured(): ?bool
+    {
+        return $this->isFeatured;
+    }
+
+    public function setIsFeatured(?bool $isFeatured): self
+    {
+        $this->isFeatured = $isFeatured;
 
         return $this;
     }
