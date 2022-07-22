@@ -6,51 +6,54 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Modifier un trick <span style="font-size: 0.5em;">Vas-y, sois pas timide !</span></h1>
-    {{ form_start(trickForm) }}
-    <div class="row mb-2">
-        <div class="form-group col-6">
-            <label for="trick_name">Nom</label>
-            {{ form_widget(trickForm.name) }}
+    <div class="container">
+        <h1>Modifier un trick <span style="font-size: 0.5em;">Vas-y, sois pas timide !</span></h1>
+        {{ form_start(trickForm) }}
+        <div class="row mb-2">
+            <div class="form-group col-12">
+                <label for="trick_name">Nom</label>
+                {{ form_widget(trickForm.name) }}
+            </div>
+
+            <div class="form-group col-12">
+                <label for="trick_trickCategory">Catégorie</label>
+                {{ form_widget(trickForm.trickCategory) }}
+            </div>
         </div>
 
-        <div class="form-group col-6">
-            <label for="trick_trickCategory">Catégorie</label>
-            {{ form_widget(trickForm.trickCategory) }}
+        <div class="row">
+            <div class="form-group mb-2 col-12">
+                <label for="">Ajoute des images</label>
+                {% if app.request.get('_route') == 'app_edit_trick' %}
+                    <div class="row">
+                        {% for image in trick.image %}
+                            <div class="col-md-6">
+                                <img class="img-fluid" src="{{ asset('uploads/images/tricks/' ~ image.name) }}"
+                                     alt="image">
+                                <a href="{{ path('app_delete_trick_image', {'id': image.id}) }}" data-delete
+                                   data-token="{{ csrf_token('delete'~image.id) }}">Supprimer</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {{ form_widget(trickForm.image) }}
+            </div>
+
+            <div class="form-group mb-2 col-12">
+                <label for="">Ajoute des vidéos</label>
+                {{ form_widget(trickForm.video) }}
+            </div>
         </div>
+
+        <div class="form-group mb-2">
+            <label for="trick_content">Contenu</label>
+            {{ form_widget(trickForm.content) }}
+        </div>
+
+        <button type="submit" class="btn btn-outline-primary">Modifier le trick !</button>
+
+        {{ form_end(trickForm) }}
     </div>
-
-    <div class="row">
-        <div class="form-group mb-2 col-6">
-            <label for="">Ajoute des vidéos</label>
-            {{ form_widget(trickForm.video) }}
-        </div>
-
-        <div class="form-group mb-2 col-6">
-            <label for="">Ajoute des images</label>
-            {% if app.request.get('_route') == 'app_edit_trick' %}
-                <div class="row">
-                    {% for image in trick.image %}
-                        <div class="col-md-6">
-                            <img class="img-fluid" src="{{ asset('uploads/images/tricks/' ~ image.name) }}" alt="image">
-                            <a href="{{ path('app_delete_trick_image', {'id': image.id}) }}" data-delete
-                               data-token="{{ csrf_token('delete'~image.id) }}">Supprimer</a>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            {{ form_widget(trickForm.image) }}
-        </div>
-    </div>
-
-    <div class="form-group mb-2">
-        <label for="trick_content">Contenu</label>
-        {{ form_widget(trickForm.content) }}
-    </div>
-
-    <button type="submit" class="btn btn-outline-primary">Modifier le trick !</button>
-
-    {{ form_end(trickForm) }}
 
 {% endblock %}
 

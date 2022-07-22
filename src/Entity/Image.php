@@ -20,7 +20,7 @@ class Image
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $filename;
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="image")
@@ -35,14 +35,14 @@ class Image
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getFilename(): ?string
     {
-        return $this->name;
+        return $this->filename;
     }
 
-    public function setName(string $name): self
+    public function setFilename(string $filename): self
     {
-        $this->name = $name;
+        $this->filename = $filename;
 
         return $this;
     }

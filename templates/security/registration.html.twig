@@ -6,40 +6,44 @@
 {% endblock %}
 
 {% block body %}
-    <h1 class="text-center">T'es nouveau nan ?</h1>
+
 
     {{ form_start(form) }}
-    <div class="row">
-        <div class="col-md-3 col-sm-1"></div>
-        <div class="col-md-6 col-sm-10">
-            <div class="row">
-                <div class="col-6">
-                    {{ form_row(form.username, {'label': 'Nom d\'utilisateur'}) }}
+    <div class="login-container">
+        <div class="login-container--form">
+            <h1 class="text-center">T'es nouveau nan ?</h1>
+            {{ form_errors(form) }}
+            <div class="col-md-4 col-sm-1"></div>
+            <div class="col-md-4 col-sm-10">
+                <div class="row">
+                    <div class="col-6">
+                        {{ form_row(form.username, {'label': 'Nom d\'utilisateur'}) }}
+                    </div>
+                    <div class="col-6">
+                        {{ form_row(form.email, {'label': 'Email'}) }}
+                    </div>
                 </div>
-                <div class="col-6">
-                    {{ form_row(form.email, {'label': 'Email'}) }}
-                </div>
-            </div>
-            <div class="row mb-2">
-                <div class="col-6">
-                    {{ form_row(form.password, {'label': 'Mot de passe'}) }}
-                </div>
-                <div class="col-6">
-                    {{ form_row(form.confirm_password, {'label': 'Confirmation mot de passe'}) }}
-                </div>
+                <div class="row mb-2">
+                    <div class="col-6">
+                        {{ form_row(form.password, {'label': 'Mot de passe'}) }}
+                    </div>
+                    <div class="col-6">
+                        {{ form_row(form.confirm_password, {'label': 'Confirmation mot de passe'}) }}
+                    </div>
 
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">Inscription</button>
+                </div>
+                <small>
+                    <a href="{{ path('security_login') }}">En fait j'ai déjà un compte</a> • <a
+                            href="{{ path('security_forgot_password') }}">J'ai
+                        complètement
+                        zappé mon mot de passe...</a>
+                </small>
             </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-success">Inscription</button>
-            </div>
-            <small>
-                <a href="{{ path('security_login') }}">En fait j'ai déjà un compte</a> • <a
-                        href="{{ path('security_forgot_password') }}">J'ai
-                    complètement
-                    zappé mon mot de passe...</a>
-            </small>
+            <div class="col-md-4 col-sm-1"></div>
         </div>
-        <div class="col-md-3 col-sm-1"></div>
     </div>
 
     {{ form_end(form) }}
