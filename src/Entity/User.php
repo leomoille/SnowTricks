@@ -25,12 +25,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
-     * @Assert\EqualTo(propertyPath="password", message="Vous devez entrer le même mot de passe")
-     */
-    public $confirm_password;
-    // Check RepeatedType pour la confirmation de mot de passe
-
-    /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
