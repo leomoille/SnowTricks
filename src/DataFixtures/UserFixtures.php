@@ -13,12 +13,10 @@ class UserFixtures extends Fixture
     public const USER_REFERENCE = 'user';
 
     private $userPasswordHasherInterface;
-    private $tokenGenerator;
 
-    public function __construct(UserPasswordHasherInterface $userPasswordHasherInterface, TokenGeneratorInterface $tokenGenerator)
+    public function __construct(UserPasswordHasherInterface $userPasswordHasherInterface)
     {
         $this->userPasswordHasherInterface = $userPasswordHasherInterface;
-        $this->tokenGenerator = $tokenGenerator;
     }
 
     public function load(ObjectManager $manager): void
