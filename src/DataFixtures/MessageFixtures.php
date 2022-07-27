@@ -36,7 +36,7 @@ class MessageFixtures extends Fixture implements DependentFixtureInterface
             $message
                 ->setContent($sentences[$i])
                 ->setAuthor($this->getReference(UserFixtures::USER_REFERENCE))
-                ->setTrick($this->getReference(TrickFixtures::TRICK_REFERENCE[mt_rand(0, 8)]))
+                ->setTrick($this->getReference(TrickFixtures::TRICK_REFERENCE[array_rand(TrickFixtures::TRICK_REFERENCE)]))
                 ->setPublicationDate(new \DateTime($date));
 
             $manager->persist($message);

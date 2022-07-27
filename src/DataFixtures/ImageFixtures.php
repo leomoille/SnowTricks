@@ -13,7 +13,7 @@ class ImageFixtures extends Fixture implements DependentFixtureInterface
     {
         $images = ['snow.jpg', 'snow-2.jpg'];
 
-        for ($i = 0; $i < 12; $i++) {
+        for ($i = 0; $i < count(TrickFixtures::TRICK_REFERENCE); $i++) {
 
             for ($j = 0; $j < count($images); $j++) {
                 $image = new Image();

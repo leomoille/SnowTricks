@@ -14,7 +14,7 @@ class VideoFixtures extends Fixture implements DependentFixtureInterface
     {
         $videoLink = 'https://www.youtube.com/watch?v=ScMzIvxBSi4';
 
-        for ($i = 0; $i < 12; $i++) {
+        for ($i = 0; $i < count(TrickFixtures::TRICK_REFERENCE); $i++) {
             $video = new Video();
 
             $video->setUrl($videoLink)
