@@ -23,19 +23,7 @@
 
         <div class="row">
             <div class="form-group mb-2 col-12">
-                <label for="">Ajoute des images</label>
-                {% if app.request.get('_route') == 'app_edit_trick' %}
-                    <div class="row">
-                        {% for image in trick.image %}
-                            <div class="col-md-6">
-                                <img class="img-fluid" src="{{ asset('uploads/images/tricks/' ~ image.name) }}"
-                                     alt="image">
-                                <a href="{{ path('app_delete_trick_image', {'id': image.id}) }}" data-delete
-                                   data-token="{{ csrf_token('delete'~image.id) }}">Supprimer</a>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+                <label for="">Ajoute ou retire des images</label>
                 {{ form_widget(trickForm.image) }}
             </div>
 

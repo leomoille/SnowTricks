@@ -25,11 +25,13 @@ class TrickType extends AbstractType
                 'expanded' => false,
             ])
             ->add('content', TextareaType::class)
-            ->add('image', FileType::class, [
-                'label' => false,
-                'multiple' => true,
-                'mapped' => false,
-                'required' => false,
+            ->add('image', CollectionType::class, [
+                'entry_type' => ImageType::class,
+                'entry_options' => ['label' => false],
+                'prototype' => true,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
             ])
             ->add('video', CollectionType::class, [
                 'entry_type' => VideoType::class,
