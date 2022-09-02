@@ -61,7 +61,7 @@ class TrickController extends AbstractController
             $images = $form->get('image')->getData();
 
             foreach ($images as $image) {
-                $file = md5(uniqid()) . '.' . $image->guessExtension();
+                $file = md5(uniqid()).'.'.$image->guessExtension();
                 $image->move(
                     $this->getParameter('trick_images_directory'),
                     $file
@@ -101,7 +101,7 @@ class TrickController extends AbstractController
             $images = $form->get('image')->getData();
 
             foreach ($images as $image) {
-                $file = md5(uniqid()) . '.' . $image->guessExtension();
+                $file = md5(uniqid()).'.'.$image->guessExtension();
                 $image->move(
                     $this->getParameter('trick_images_directory'),
                     $file
@@ -138,7 +138,7 @@ class TrickController extends AbstractController
      */
     public function delete(Request $request, Trick $trick, TrickRepository $trickRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$trick->getId(), $request->request->get('_token'))) {
             $trickRepository->remove($trick);
         }
 
@@ -152,9 +152,9 @@ class TrickController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['_token'])) {
+        if ($this->isCsrfTokenValid('delete'.$image->getId(), $data['_token'])) {
             $fileName = $image->getFilename();
-            unlink($this->getParameter('trick_images_directory') . '/' . $fileName);
+            unlink($this->getParameter('trick_images_directory').'/'.$fileName);
 
             $manager->remove($image);
             $manager->flush();

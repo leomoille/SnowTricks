@@ -2,7 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\DataFixtures\TrickFixtures;
 use App\Entity\Video;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -14,7 +13,7 @@ class VideoFixtures extends Fixture implements DependentFixtureInterface
     {
         $videoLink = 'https://www.youtube.com/watch?v=ScMzIvxBSi4';
 
-        for ($i = 0; $i < count(TrickFixtures::TRICK_REFERENCE); $i++) {
+        for ($i = 0; $i < count(TrickFixtures::TRICK_REFERENCE); ++$i) {
             $video = new Video();
 
             $video->setUrl($videoLink)
@@ -26,10 +25,10 @@ class VideoFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
-            TrickFixtures::class
+            TrickFixtures::class,
         ];
     }
 }

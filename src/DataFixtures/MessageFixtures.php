@@ -113,14 +113,16 @@ class MessageFixtures extends Fixture implements DependentFixtureInterface
             'Etiam bibendum ornare turpis. Sed et imperdiet ex, non bibendum.',
         ];
 
-        for ($i = 0; $i < count($sentences); $i++) {
+        for ($i = 0; $i < count($sentences); ++$i) {
             $message = new Message();
             $date = date('Y-m-d H:i:s', mt_rand(1644102000, 1651788000));
 
             $message
                 ->setContent($sentences[$i])
                 ->setAuthor($this->getReference(UserFixtures::USER_REFERENCE))
-                ->setTrick($this->getReference(TrickFixtures::TRICK_REFERENCE[array_rand(TrickFixtures::TRICK_REFERENCE)]))
+                ->setTrick(
+                    $this->getReference(TrickFixtures::TRICK_REFERENCE[array_rand(TrickFixtures::TRICK_REFERENCE)])
+                )
                 ->setPublicationDate(new \DateTime($date));
 
             $manager->persist($message);
@@ -129,11 +131,11 @@ class MessageFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             UserFixtures::class,
-            TrickFixtures::class
+            TrickFixtures::class,
         ];
     }
 }

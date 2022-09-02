@@ -6,13 +6,12 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class UserFixtures extends Fixture
 {
     public const USER_REFERENCE = 'user';
 
-    private $userPasswordHasherInterface;
+    private UserPasswordHasherInterface $userPasswordHasherInterface;
 
     public function __construct(UserPasswordHasherInterface $userPasswordHasherInterface)
     {

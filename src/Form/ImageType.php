@@ -16,10 +16,11 @@ class ImageType extends AbstractType
         $builder
             ->add('content', FileType::class, [
                 'required' => false,
-                'mapped' => false
+                'mapped' => false,
             ])
             ->add('isFeatured', CheckboxType::class, [
-                'label' => 'Utiliser comme banière'
+                'label' => 'Utiliser comme bannière',
+                'required' => false,
             ]);
     }
 

@@ -21,7 +21,7 @@ class RegistrationType extends AbstractType
                 'invalid_message' => 'Les mots de passes ne correspondent pas.',
                 'options' => ['attr' => ['class' => 'password-field']],
                 'required' => true,
-                'first_options'  => ['label' => 'Mot de passe'],
+                'first_options' => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Confirmation du mot de passe'],
             ]);
     }

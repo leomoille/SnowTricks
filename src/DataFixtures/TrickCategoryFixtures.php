@@ -12,17 +12,17 @@ class TrickCategoryFixtures extends Fixture
     public const TRICKCATEGORY_REFFERENCE = [
         'trick-category-one',
         'trick-category-two',
-        'trick-category-tree'
+        'trick-category-tree',
     ];
 
     // ASCIISluger à instencier dans le constructeur
 
     public function load(ObjectManager $manager): void
     {
-        $categories = ['Catégorie Une', 'Categorie Deux', 'Catégorie Trois'];
+        $categories = ['Catégorie Une', 'Catégorie Deux', 'Catégorie Trois'];
         $slugger = new AsciiSlugger();
 
-        for ($i = 0; $i < count($categories); $i++) {
+        for ($i = 0; $i < count($categories); ++$i) {
             $trickCategory = new TrickCategory();
 
             $trickCategory->setName($categories[$i])
