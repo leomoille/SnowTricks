@@ -57,7 +57,7 @@ class SecurityController extends AbstractController
                 ->from('no-reply@snowtricks.dev')
                 ->to($user->getEmail())
                 ->subject('Activation du compte')
-                ->htmlTemplate('email/account-activation.html.twig')
+                ->htmlTemplate('email/account_activation.html.twig')
                 ->context([
                     'url' => $url,
                     'user' => $user,
@@ -78,10 +78,8 @@ class SecurityController extends AbstractController
      */
     public function activateAccount(
         string $token,
-        Request $request,
         UserRepository $userRepository,
-        EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher
+        EntityManagerInterface $entityManager
     ): Response {
         $user = $userRepository->findOneByActivationToken($token);
 
@@ -149,7 +147,7 @@ class SecurityController extends AbstractController
                     ->from('no-reply@snowtricks.dev')
                     ->to($user->getEmail())
                     ->subject('Réinitialisation de mot de passe')
-                    ->htmlTemplate('email/password-recovery.html.twig')
+                    ->htmlTemplate('email/password_recovery.html.twig')
                     ->context([
                         'url' => $url,
                         'user' => $user,
@@ -171,7 +169,7 @@ class SecurityController extends AbstractController
             }
         }
 
-        return $this->render('security/forgot-password.html.twig', [
+        return $this->render('security/forgot_password.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -210,7 +208,7 @@ class SecurityController extends AbstractController
                 return $this->redirectToRoute('security_login');
             }
 
-            return $this->render('security/reset-password.html.twig', [
+            return $this->render('security/reset_password.html.twig', [
                 'form' => $form->createView(),
             ]);
         }

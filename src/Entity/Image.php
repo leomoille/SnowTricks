@@ -20,7 +20,7 @@ class Image
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $filename;
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="image")
@@ -28,21 +28,24 @@ class Image
      */
     private $trick;
 
-    private $content;
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isFeatured;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getFilename(): ?string
     {
-        return $this->name;
+        return $this->filename;
     }
 
-    public function setName(string $name): self
+    public function setFilename(string $filename): self
     {
-        $this->name = $name;
+        $this->filename = $filename;
 
         return $this;
     }
@@ -59,19 +62,15 @@ class Image
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getContent()
+    public function isIsFeatured(): ?bool
     {
-        return $this->content;
+        return $this->isFeatured;
     }
 
-    /**
-     * @param mixed $content
-     */
-    public function setContent($content): void
+    public function setIsFeatured(?bool $isFeatured): self
     {
-        $this->content = $content;
+        $this->isFeatured = $isFeatured;
+
+        return $this;
     }
 }

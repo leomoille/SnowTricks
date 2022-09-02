@@ -26,7 +26,7 @@ class TrickController extends AbstractController
      */
     public function tricks(TrickRepository $trickRepository): Response
     {
-        $lastTricks = $trickRepository->findLastEntry(3);
+        $lastTricks = $trickRepository->findAll();
 
         $form = $this->createForm(TrickSearchType::class);
 
@@ -46,6 +46,40 @@ class TrickController extends AbstractController
     {
         return $this->render('trick/trick.html.twig', [
             'trick' => $trick,
+        ]);
+    }
+
+    /**
+     * @Route("/trick/{slug}/edit", name="app_edit_trick", methods={"GET", "POST"})
+     */
+    public function edit(Request $request, Trick $trick, TrickRepository $trickRepository): Response
+    {
+        $form = $this->createForm(TrickType::class, $trick);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $images = $form->get('image')->getData();
+
+            foreach ($images as $image) {
+                $file = md5(uniqid()).'.'.$image->guessExtension();
+                $image->move(
+                    $this->getParameter('trick_images_directory'),
+                    $file
+                );
+
+                $img = new Image();
+                $img->setFilename($file);
+
+                $trick->addImage($img);
+            }
+            $trickRepository->add($trick);
+
+            return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('trick/edit.html.twig', [
+            'trick' => $trick,
+            'trickForm' => $form,
         ]);
     }
 
@@ -74,7 +108,7 @@ class TrickController extends AbstractController
                 );
 
                 $img = new Image();
-                $img->setName($file);
+                $img->setFilename($file);
 
                 $trick->addImage($img);
             }
@@ -82,7 +116,8 @@ class TrickController extends AbstractController
             $slugger = new AsciiSlugger();
 
             $trick->setCreatedAt(new DateTime());
-            $trick->setSlug($slugger->slug($trick->getName()));
+            $trick->setSlug($slugger->slug($trick->getName()))
+                ->setAuthor($this->getUser());
             $manager->persist($trick);
 
             $manager->flush();
@@ -90,44 +125,12 @@ class TrickController extends AbstractController
             return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()]);
         }
 
-        return $this->render('trick/add.html.twig', [
+        return $this->render(
+            'trick/add.html.twig',
+            [
                 'trickForm' => $form->createView(),
             ]
         );
-    }
-
-    /**
-     * @Route("/trick/{slug}/edit", name="app_edit_trick", methods={"GET", "POST"})
-     */
-    public function edit(Request $request, Trick $trick, TrickRepository $trickRepository): Response
-    {
-        $form = $this->createForm(TrickType::class, $trick);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $images = $form->get('image')->getData();
-
-            foreach ($images as $image) {
-                $file = md5(uniqid()).'.'.$image->guessExtension();
-                $image->move(
-                    $this->getParameter('trick_images_directory'),
-                    $file
-                );
-
-                $img = new Image();
-                $img->setName($file);
-
-                $trick->addImage($img);
-            }
-            $trickRepository->add($trick);
-
-            return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('trick/edit.html.twig', [
-            'trick' => $trick,
-            'trickForm' => $form,
-        ]);
     }
 
     /**
@@ -150,7 +153,7 @@ class TrickController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         if ($this->isCsrfTokenValid('delete'.$image->getId(), $data['_token'])) {
-            $fileName = $image->getName();
+            $fileName = $image->getFilename();
             unlink($this->getParameter('trick_images_directory').'/'.$fileName);
 
             $manager->remove($image);

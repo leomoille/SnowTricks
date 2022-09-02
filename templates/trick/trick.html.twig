@@ -1,91 +1,101 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ trick.name }}
+	{{ trick.name }}
 {% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="col-md-4 mb-3 border-end">
-            <h1>{{ trick.name }}</h1>
-            <p>
-                <span class="badge bg-info fs-6">{{ trick.trickCategory.name }}</span>
-                Ajoutée le {{ trick.createdAt | date('d/m/Y') }}
-            </p>
-            <hr>
-            <div class="accordion accordion-flush rounded-0" id="accordionTrickMedia">
-                <div class="accordion-item rounded-0">
-                    <h2 class="accordion-header rounded-0" id="headingTrickImage">
-                        <button class="accordion-button collapsed rounded-0" type="button"
-                                data-bs-toggle="collapse" data-bs-target="#collapseTrickImage"
-                                aria-expanded="true" aria-controls="collapseTrickImage">
-                            Images
-                        </button>
-                    </h2>
-                    <div id="collapseTrickImage" class="accordion-collapse collapse"
-                         aria-labelledby="headingTrickImage" data-bs-parent="#accordionTrickMedia">
-                        <div class="accordion-body">
-                            {% if trick.image is not empty %}
-                                {% for image in trick.image %}
-                                    <img class="img-fluid"
-                                         src="{{ asset('/uploads/images/tricks/'~image.name) }}" alt="">
-                                {% endfor %}
-                            {% else %}
-                                <p>Aucune image !</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
+	{# HEADER #}
+	<header class="tricks-header" style="background: url('{{ asset('images/snow.jpg') }}') no-repeat; background-size: cover;">
+		<h1 class="text-center">
+			{{ trick.name }}
+		</h1>
+		<div class="row g-2 justify-content-center">
+			<div class="col-auto">
+				<a href="{{ path('app_edit_trick', {slug: trick.slug}) }}" class="btn btn-dark">Modifier</a>
+			</div>
+			<div class="col-auto">
+				<a href="#" class="btn btn-danger">Supprimer</a>
+			</div>
+		</div>
 
-                <div class="accordion-item  rounded-0">
-                    <h2 class="accordion-header rounded-0" id="headingTrickVideo">
-                        <button class="accordion-button collapsed rounded-0" type="button"
-                                data-bs-toggle="collapse" data-bs-target="#collapseTrickVideo"
-                                aria-expanded="true" aria-controls="collapseTrickVideo">
-                            Vidéos
-                        </button>
-                    </h2>
-                    <div id="collapseTrickVideo" class="accordion-collapse collapse"
-                         aria-labelledby="headingTrickVideo" data-bs-parent="#accordionTrickMedia">
-                        <div class="accordion-body">
-                            {% if trick.video is not empty %}
-                                {% for video in trick.video %}
-                                    <p class="h5">{{ video.name }}</p>
-                                    <iframe class="embed-responsive-item"
-                                            src="https://www.youtube.com/embed/{{ video.url | split('=', 2)[1] }}"
-                                            title="{{ video.name }}"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                            allowfullscreen></iframe>
-                                {% endfor %}
-                            {% else %}
-                                <p>Aucune vidéo !</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <form class="btn-group w-100" method="post" action="{{ path('app_delete_trick', {'slug': trick.slug}) }}"
-                  onsubmit="return confirm('Tu es vraiment sûr(e) de vouloir supprimer ce trick ?!');">
-                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
-                <a href="{{ path('app_edit_trick', {"slug": trick.slug}) }}" type="button"
-                   class="btn btn-primary">Éditer</a>
-                <button class="btn btn-danger">Supprimer</button>
-            </form>
-        </div>
-        <div class="col-md-8">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <p>{{ trick.content }}</p>
-                    </div>
-                    <div class="col-12">
-                        <hr>
-                        <h2>Les commentaires !</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	</header>
 
+	<div
+		class="container">
+		{# SECTION MEDIA #}
+		<section class="row g-2 justify-content-center mt-2 mb-5">
+			{% if trick.image is not empty %}
+				{% for image in trick.image %}
+					<div class="col-auto">
+						<img class="img-fluid" style="height: 150px;" src="{{ asset('/images/tricks/'~image.filename) }}" alt="">
+					</div>
+				{% endfor %}
+			{% else %}
+				<p>Aucune image !</p>
+			{% endif %}
+
+
+			{% if trick.video is not empty %}
+				{% for video in trick.video %}
+					{# <p class="h5">{{ video.name }}</p> #}
+					<div class="col-auto">
+						<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video.url | split('=', 2)[1] }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+					</div>
+				{% endfor %}
+			{% else %}
+				<p>Aucune vidéo !</p>
+			{% endif %}
+
+		</section>
+
+		{# CONTENU TEXT #}
+		<article class="mb-5">
+			<p class="text-center">{{ trick.content }}</p>
+		</article>
+
+		<aside>
+			<p class="text-center">
+				<span class="badge bg-info fs-6">{{ trick.trickCategory.name }}</span>
+				<span class="badge bg-info fs-6">Ajoutée le
+					{{ trick.createdAt | date('d/m/Y') }}</span>
+				<span class="badge bg-info fs-6">Dernière modification le 00/00/0000 à 00h00</span>
+			</p>
+		</aside>
+
+		<hr style="width: 70%; margin: auto;">
+		<form class="row g-2 justify-content-center mt-4 mb-3">
+			<div class="col-6">
+				<label for="inputMessage" class="visually-hidden">Message</label>
+				<input type="text" class="form-control" id="inputMessage" placeholder="Message...">
+			</div>
+			<div class="col-auto">
+				<button type="submit" class="btn btn-primary mb-3">Envoyer !</button>
+			</div>
+		</form>
+		<hr
+		style="width: 70%; margin: auto;">
+
+		{# Comments list #}
+		<section class="mt-4">
+			{% for message in trick.message %}
+				<div class="row g-3 justify-content-center align-items-center">
+					<div class="col-auto">
+						<p style="font-size: 4em;">🏂️</p>
+					</div>
+					<div class="col-8">
+						<p class="h5">{{message.author.username}}</p>
+                        <p class="h6">{{message.publicationDate | date("d/m/Y")}}</p>
+						<p>{{message.content}}</p>
+					</div>
+				</div>
+			{% endfor %}
+
+			<div class="row justify-content-center">
+				<div class="col-auto">
+					<a href="#" class="btn btn-dark">Charger la suite</a>
+				</div>
+			</div>
+		</section>
+	</div>
 {% endblock %}
