@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Image;
 use App\Entity\Trick;
 use App\Form\TrickSearchType;
 use App\Form\TrickType;
@@ -10,7 +9,6 @@ use App\Repository\TrickRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -52,25 +50,28 @@ class TrickController extends AbstractController
     /**
      * @Route("/trick/{slug}/edit", name="app_edit_trick", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Trick $trick, TrickRepository $trickRepository): Response
-    {
+    public function edit(
+        Request $request,
+        Trick $trick,
+        TrickRepository $trickRepository,
+    ): Response {
         $form = $this->createForm(TrickType::class, $trick);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $images = $form->get('image')->getData();
+            $images = $form->get('image');
 
             foreach ($images as $image) {
-                $file = md5(uniqid()).'.'.$image->guessExtension();
-                $image->move(
-                    $this->getParameter('trick_images_directory'),
-                    $file
-                );
-
-                $img = new Image();
-                $img->setFilename($file);
-
-                $trick->addImage($img);
+                if (null !== $image->getData()->getFileContent()) {
+                    $file = md5(uniqid()).'.'.$image->get('fileContent')->getData()->guessExtension();
+                    $image->get('fileContent')->getData()->move(
+                        $this->getParameter('trick_images_directory'),
+                        $file
+                    );
+                    $image->getData()->setFilename($file);
+//                    $trick->addImage($image->getData());
+                }
             }
             $trickRepository->add($trick);
 
@@ -85,10 +86,6 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/trick/ajouter", name="app_add_trick")
-     *
-     * @param Request $request
-     * @param EntityManagerInterface $manager
-     * @return Response
      */
     public function add(Request $request, EntityManagerInterface $manager): Response
     {
@@ -98,17 +95,18 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $images = $form->get('image')->getData();
+            $images = $form->get('image');
 
             foreach ($images as $image) {
-                $file = md5(uniqid()).'.'.$image->guessExtension();
-                $image->move(
+                $file = $image->get('fileContent')->getData();
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                $file->move(
                     $this->getParameter('trick_images_directory'),
-                    $file
+                    $fileName
                 );
 
-                $img = new Image();
-                $img->setFilename($file);
+                $img = $image->getData();
+                $img->setFilename($fileName);
 
                 $trick->addImage($img);
             }
@@ -145,23 +143,4 @@ class TrickController extends AbstractController
         return $this->redirectToRoute('app_tricks', [], Response::HTTP_SEE_OTHER);
     }
 
-    /**
-     * @Route("/remove/image/{id}", name="app_delete_trick_image", methods={"DELETE"})
-     */
-    public function deleteImage(Image $image, Request $request, EntityManagerInterface $manager)
-    {
-        $data = json_decode($request->getContent(), true);
-
-        if ($this->isCsrfTokenValid('delete'.$image->getId(), $data['_token'])) {
-            $fileName = $image->getFilename();
-            unlink($this->getParameter('trick_images_directory').'/'.$fileName);
-
-            $manager->remove($image);
-            $manager->flush();
-
-            return new JsonResponse(['success' => 1]);
-        } else {
-            return new JsonResponse(['error' => 'Token Invalide'], 400);
-        }
-    }
 }

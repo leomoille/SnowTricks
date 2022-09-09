@@ -10,12 +10,12 @@
         <h1>Ajouter un nouveau trick <span style="font-size: 0.5em;">Vas-y, sois pas timide !</span></h1>
         {{ form_start(trickForm) }}
         <div class="row mb-2">
-            <div class="form-group col-12">
+            <div class="form-group col-12 col-md-6">
                 <label for="trick_name">Nom</label>
                 {{ form_widget(trickForm.name) }}
             </div>
 
-            <div class="form-group col-12">
+            <div class="form-group col-12 col-md-6">
                 <label for="trick_trickCategory">Catégorie</label>
                 {{ form_widget(trickForm.trickCategory) }}
             </div>

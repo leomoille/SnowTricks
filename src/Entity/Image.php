@@ -22,6 +22,8 @@ class Image
      */
     private $filename;
 
+    private $fileContent;
+
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="image")
      * @ORM\JoinColumn(nullable=false)
@@ -50,6 +52,18 @@ class Image
         return $this;
     }
 
+    public function getFileContent(): ?string
+    {
+        return $this->fileContent;
+    }
+
+    public function setFileContent(string $fileContent): self
+    {
+        $this->fileContent = $fileContent;
+
+        return $this;
+    }
+
     public function getTrick(): ?Trick
     {
         return $this->trick;
@@ -72,5 +86,10 @@ class Image
         $this->isFeatured = $isFeatured;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getFilename();
     }
 }
