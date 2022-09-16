@@ -18,9 +18,6 @@ class TrickController extends AbstractController
 {
     /**
      * @Route("/tricks", name="app_tricks")
-     *
-     * @param TrickRepository $trickRepository
-     * @return Response
      */
     public function tricks(TrickRepository $trickRepository): Response
     {
@@ -36,9 +33,6 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/tricks/{slug}", name="app_trick")
-     *
-     * @param Trick $trick
-     * @return Response
      */
     public function trick(Trick $trick): Response
     {
@@ -53,27 +47,16 @@ class TrickController extends AbstractController
     public function edit(
         Request $request,
         Trick $trick,
-        TrickRepository $trickRepository,
+        EntityManagerInterface $manager
     ): Response {
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $images = $form->get('image');
+            $manager->persist($trick);
 
-            foreach ($images as $image) {
-                if (null !== $image->getData()->getFileContent()) {
-                    $file = md5(uniqid()).'.'.$image->get('fileContent')->getData()->guessExtension();
-                    $image->get('fileContent')->getData()->move(
-                        $this->getParameter('trick_images_directory'),
-                        $file
-                    );
-                    $image->getData()->setFilename($file);
-//                    $trick->addImage($image->getData());
-                }
-            }
-            $trickRepository->add($trick);
+            $manager->flush();
 
             return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()], Response::HTTP_SEE_OTHER);
         }
@@ -95,22 +78,6 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $images = $form->get('image');
-
-            foreach ($images as $image) {
-                $file = $image->get('fileContent')->getData();
-                $fileName = md5(uniqid()).'.'.$file->guessExtension();
-                $file->move(
-                    $this->getParameter('trick_images_directory'),
-                    $fileName
-                );
-
-                $img = $image->getData();
-                $img->setFilename($fileName);
-
-                $trick->addImage($img);
-            }
-
             $slugger = new AsciiSlugger();
 
             $trick->setCreatedAt(new DateTime());
@@ -130,17 +97,4 @@ class TrickController extends AbstractController
             ]
         );
     }
-
-    /**
-     * @Route("/trick/{slug}", name="app_delete_trick", methods={"POST"})
-     */
-    public function delete(Request $request, Trick $trick, TrickRepository $trickRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$trick->getId(), $request->request->get('_token'))) {
-            $trickRepository->remove($trick);
-        }
-
-        return $this->redirectToRoute('app_tricks', [], Response::HTTP_SEE_OTHER);
-    }
-
 }

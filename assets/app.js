@@ -17,6 +17,6 @@ import './bootstrap.bundle.min.js';
 import './bootstrap-custom';
 
 // form CollectionType
-import './add-collection-widget';
-
-import './imageDelete';
+// import './add-collection-widget';
+//
+// import './imageDelete';
