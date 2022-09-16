@@ -4,10 +4,11 @@ namespace App\DataFixtures;
 
 use App\Entity\TrickCategory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
-class TrickCategoryFixtures extends Fixture
+class TrickCategoryFixtures extends Fixture implements FixtureGroupInterface
 {
     public const TRICKCATEGORY_REFFERENCE = [
         'trick-category-one',
@@ -34,5 +35,10 @@ class TrickCategoryFixtures extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ['user'];
     }
 }

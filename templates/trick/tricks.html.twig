@@ -7,7 +7,7 @@
 
 {% block body %}
     <header class="tricks-header"
-            style="background: url('{{ asset('images/snow.jpg') }}') no-repeat; background-size: cover;">
+            style="background: url('{{ asset('images/placeholder.jpg') }}') no-repeat; background-size: cover;">
         <h1 class="text-center">Le dico' des
             tricks<br>
             <span style="display: block; font-size: 0.5em;">Si tu ne trouve pas ton bonheur, ajoute le !</span>
@@ -33,7 +33,6 @@
                     {% else %}
                         <p>Inscrit toi ou active ton compte pour ajouter de nouveaux tricks !</p>
                     {% endif %}
-
                 </div>
             </div>
             {# Affichage des tricks ajoutées #}
@@ -41,12 +40,19 @@
                 {% for trick in lastTricks %}
                     <div class="col-sm-12 col-md-6 col-lg-4">
                         <div class="card mb-2" style="max-width: 600px;">
-                            {% for image in trick.image|slice(0, 1) %}
+                            {% if trick.image is not empty %}
+                                {% for image in trick.image %}
+                                    {% if image.isFeatured %}
+                                        <img class="img-fluid"
+                                             style="object-fit: cover!important; height: 200px; border-radius: 2px 2px 0 0;"
+                                             src="{{ asset('/images/tricks/'~image.filename) }}" alt="Accessibility">
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
                                 <img class="img-fluid"
-                                     style="object-fit: cover!important; max-height: 250px; border-radius: 2px 2px 0 0;"
-                                     src="{{ asset('/images/tricks/'~image.filename) }}" alt="Accessibility">
-                            {% endfor %}
-
+                                     style="object-fit: cover!important; height: 250px; border-radius: 2px 2px 0 0;"
+                                     src="{{ asset('/images/tricks/placeholder.jpg') }}" alt="Accessibility">
+                            {% endif %}
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12">

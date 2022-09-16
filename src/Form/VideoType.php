@@ -14,10 +14,6 @@ class VideoType extends AbstractType
     {
         $builder
             ->add('url', UrlType::class);
-        //            ->add('trick', EntityType::class, [
-        //                'class' => Trick::class,
-        //                'choice_label' => 'name',
-        //            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

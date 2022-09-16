@@ -8,15 +8,19 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class ImageType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('content', FileType::class, [
-                'required' => false,
-                'mapped' => false,
+            ->add('file', FileType::class, [
+                'label' => false,
+                'required' => true,
+                'constraints' => [
+                    new File(),
+                ],
             ])
             ->add('isFeatured', CheckboxType::class, [
                 'label' => 'Utiliser comme bannière',
