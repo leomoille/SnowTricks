@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Trick;
 use App\Form\TrickSearchType;
 use App\Form\TrickType;
+use App\Repository\MessageRepository;
 use App\Repository\TrickRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,25 +20,38 @@ class TrickController extends AbstractController
     /**
      * @Route("/tricks", name="app_tricks")
      */
-    public function tricks(TrickRepository $trickRepository): Response
+    public function tricks(Request $request, TrickRepository $trickRepository): Response
     {
-        $lastTricks = $trickRepository->findAll();
+        // $lastTricks = $trickRepository->findAll();
+
+        $offset = max(0, $request->query->getInt('offset', 0));
+        $paginator = $trickRepository->getTricksPaginator($offset);
+
+
 
         $form = $this->createForm(TrickSearchType::class);
 
         return $this->render('trick/tricks.html.twig', [
-            'lastTricks' => $lastTricks,
+            'lastTricks' => $paginator,
             'searchForm' => $form->createView(),
+            'previous' => $offset - TrickRepository::PAGINATOR_PER_PAGE,
+            'next' => min(count($paginator), $offset + TrickRepository::PAGINATOR_PER_PAGE),
         ]);
     }
 
     /**
      * @Route("/tricks/{slug}", name="app_trick")
      */
-    public function trick(Trick $trick): Response
+    public function trick(Request $request, Trick $trick, MessageRepository $messageRepository): Response
     {
+        $offset = max(0, $request->query->getInt('offset', 0));
+        $paginator = $messageRepository->getMessagePaginator($trick, $offset);
+
         return $this->render('trick/trick.html.twig', [
             'trick' => $trick,
+            'messages' => $paginator,
+            'previous' => $offset - MessageRepository::PAGINATOR_PER_PAGE,
+            'next' => min(count($paginator), $offset + MessageRepository::PAGINATOR_PER_PAGE),
         ]);
     }
 
