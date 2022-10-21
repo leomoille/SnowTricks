@@ -24,11 +24,6 @@ class Image
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $extension;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="image")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -57,18 +52,6 @@ class Image
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getExtension(): ?string
-    {
-        return $this->extension;
-    }
-
-    public function setExtension(string $extension): self
-    {
-        $this->extension = $extension;
 
         return $this;
     }

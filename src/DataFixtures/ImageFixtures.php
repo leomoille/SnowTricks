@@ -19,7 +19,7 @@ class ImageFixtures extends Fixture implements DependentFixtureInterface
                 $image = new Image();
 
                 $image
-                    ->setFilename($images[$j])
+                    ->setName($images[$j])
                     ->setTrick($this->getReference(TrickFixtures::TRICK_REFERENCE[$i]));
 
                 if (!$set) {
