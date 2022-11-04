@@ -79,9 +79,9 @@
 		{# Comments list #}
 		<section class="mt-4">
 			{% for message in messages %}
-				<div class="row g-3 justify-content-center align-items-center">
+				<div class="row g-3 justify-content-center align-items-center mb-4">
 					<div class="col-auto">
-						<p style="font-size: 4em;">🏂️</p>
+						<img src="{{asset('images/avatar/')~message.author.avatar}}" alt="" style="object-fit: cover;" width="64" height="64" class="rounded-circle">
 					</div>
 					<div class="col-8">
 						<p class="h5">{{message.author.username}} <span class="small">({{message.publicationDate | date("d/m/Y")}})</span></p>

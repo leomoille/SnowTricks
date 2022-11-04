@@ -288,7 +288,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getAvatar(): ?string
     {
-        return $this->avatar;
+        if (empty($this->avatar)) {
+            return 'user-placeholder.png';
+        } else {
+            return $this->avatar;
+        }
     }
 
     public function setAvatar(?string $avatar): self
