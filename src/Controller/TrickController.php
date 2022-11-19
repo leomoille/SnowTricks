@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Message;
+use App\Entity\User;
 use App\Entity\Trick;
+use App\Form\MessageType;
 use App\Form\TrickSearchType;
 use App\Form\TrickType;
 use App\Repository\MessageRepository;
@@ -42,13 +45,37 @@ class TrickController extends AbstractController
     /**
      * @Route("/tricks/{slug}", name="app_trick")
      */
-    public function trick(Request $request, Trick $trick, MessageRepository $messageRepository): Response
+    public function trick(Request $request, Trick $trick, MessageRepository $messageRepository, EntityManagerInterface $manager): Response
     {
         $offset = max(0, $request->query->getInt('offset', 0));
         $paginator = $messageRepository->getMessagePaginator($trick, $offset);
 
+        $message = new Message;
+
+        $form = $this->createForm(MessageType::class, $message, ['action' => '#comment-form']);
+
+        $form->handleRequest($request);
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($form->isSubmitted() && $form->isValid() && !is_null($user) && $user->getIsActivated()) {
+            $message
+                ->setAuthor($this->getUser())
+                ->setTrick($trick)
+                ->setPublicationDate(new \DateTime());
+
+            $manager->persist($message);
+
+            $manager->flush();
+
+            return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug(), '_fragment' => 'comment'], Response::HTTP_SEE_OTHER);
+        }
+
+
         return $this->render('trick/trick.html.twig', [
             'trick' => $trick,
+            'form' => $form->createView(),
             'messages' => $paginator,
             'previous' => $offset - MessageRepository::PAGINATOR_PER_PAGE,
             'next' => min(count($paginator), $offset + MessageRepository::PAGINATOR_PER_PAGE),
