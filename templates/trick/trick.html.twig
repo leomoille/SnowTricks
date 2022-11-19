@@ -21,8 +21,7 @@
 
 	</header>
 
-	<div
-		class="container">
+	<div class="container">
 		{# SECTION MEDIA #}
 		<section class="row g-2 justify-content-center mt-2 mb-5">
 			{% if trick.image is not empty %}
@@ -64,27 +63,39 @@
 		</aside>
 
 		<hr style="width: 70%; margin: auto;">
-		<form class="row g-2 justify-content-center mt-4 mb-3">
-			<div class="col-6">
-				<label for="inputMessage" class="visually-hidden">Message</label>
-				<input type="text" class="form-control" id="inputMessage" placeholder="Message...">
+		<section class="mt-4" id="comment-form">
+			<h2 class="text-center">Laisse un commentaire</h2>
+			{% if app.user %}
+			{{ form_start(form) }}
+			<div class="row g-2 justify-content-center mt-4 mb-3">
+				<div class="col-6">
+					{{ form_widget(form.content) }}
+				</div>
+				<div class="col-auto">
+					<button type="submit" class="btn btn-primary mb-3">Envoyer !</button>
+				</div>
 			</div>
-			<div class="col-auto">
-				<button type="submit" class="btn btn-primary mb-3">Envoyer !</button>
-			</div>
-		</form>
+			{{ form_end(form) }}
+			{% else %}
+				<p class="text-center">Vous devez être connecté.e pour pouvoir commenter !</p>
+			{% endif %}
+		</section>
 		<hr
 		style="width: 70%; margin: auto;">
 
 		{# Comments list #}
-		<section class="mt-4">
+		<section class="mt-4" id="comment">
 			{% for message in messages %}
 				<div class="row g-3 justify-content-center align-items-center mb-4">
 					<div class="col-auto">
 						<img src="{{asset('images/avatar/')~message.author.avatar}}" alt="" style="object-fit: cover;" width="64" height="64" class="rounded-circle">
 					</div>
 					<div class="col-8">
-						<p class="h5">{{message.author.username}} <span class="small">({{message.publicationDate | date("d/m/Y")}})</span></p>
+						<p>
+							<span class="h5">{{message.author.username}}</span>
+							<span class="small">(le
+								{{message.publicationDate | date("d/m/Y à H:i")}})</span>
+						</p>
 						<p>{{message.content}}</p>
 					</div>
 				</div>

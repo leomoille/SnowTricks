@@ -43,7 +43,7 @@ class Trick
     /**
      * @ORM\OneToMany(targetEntity=Message::class, mappedBy="trick")
      */
-    private $message;
+    private $messages;
 
     /**
      * @ORM\ManyToOne(targetEntity=TrickCategory::class, inversedBy="tricks")
@@ -76,7 +76,7 @@ class Trick
     {
         $this->image = new ArrayCollection();
         $this->video = new ArrayCollection();
-        $this->message = new ArrayCollection();
+        $this->messages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -171,15 +171,15 @@ class Trick
     /**
      * @return Collection<int, Message>
      */
-    public function getMessage(): Collection
+    public function getMessages(): Collection
     {
-        return $this->message;
+        return $this->messages;
     }
 
     public function addMessage(Message $message): self
     {
-        if (!$this->message->contains($message)) {
-            $this->message[] = $message;
+        if (!$this->messages->contains($message)) {
+            $this->messages[] = $message;
             $message->setTrick($this);
         }
 
@@ -188,7 +188,7 @@ class Trick
 
     public function removeMessage(Message $message): self
     {
-        if ($this->message->removeElement($message)) {
+        if ($this->messages->removeElement($message)) {
             // set the owning side to null (unless already changed)
             if ($message->getTrick() === $this) {
                 $message->setTrick(null);

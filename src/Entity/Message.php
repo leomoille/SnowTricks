@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\MessageRepository;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=MessageRepository::class)
@@ -20,6 +21,7 @@ class Message
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
      */
     private $content;
 
@@ -29,7 +31,7 @@ class Message
     private $publicationDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="Message")
+     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="messages")
      * @ORM\JoinColumn(nullable=false)
      */
     private $trick;

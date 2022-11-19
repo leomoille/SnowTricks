@@ -14,12 +14,7 @@ class MessageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('content')
-            ->add('publicationDate')
-            ->add('trick', EntityType::class, [
-                'class' => Trick::class,
-                'choice_label' => 'name',
-            ]);
+            ->add('content');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
