@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Message;
-use App\Entity\User;
 use App\Entity\Trick;
+use App\Entity\User;
 use App\Form\MessageType;
 use App\Form\TrickSearchType;
 use App\Form\TrickType;
@@ -83,13 +83,10 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/trick/{slug}/edit", name="app_edit_trick", methods={"GET", "POST"})
+     * @Route("/trick/{slug}/editer", name="app_edit_trick", methods={"GET", "POST"})
      */
-    public function edit(
-        Request $request,
-        Trick $trick,
-        EntityManagerInterface $manager
-    ): Response {
+    public function edit(Request $request, Trick $trick, EntityManagerInterface $manager): Response
+    {
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);

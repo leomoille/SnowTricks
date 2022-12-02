@@ -1,67 +1,54 @@
 {% extends 'base.html.twig' %}
-{% form_theme trickForm 'bootstrap_5_layout.html.twig' %}
+
+{% form_theme trickForm with ['bootstrap_5_layout.html.twig', _self] %}
 
 {% block title %}
-    Ajouter une figure
+	Ajouter une figure
 {% endblock %}
+
+{# Image Collection #}
+{# {% block _trick_image_entry_widget %}
+	<div class="row">
+		<div class="col">1</div>
+		<div class="col">2</div>
+	</div>
+{% endblock %} #}
 
 {% block body %}
-    <div class="container">
-        <h1>Ajouter un nouveau trick <span style="font-size: 0.5em;">Vas-y, sois pas timide !</span></h1>
-        {{ form_start(trickForm) }}
-        {{ form_errors(trickForm) }}
-        <div class="row mb-2">
-            <div class="form-group col-12 col-md-6">
-                <label for="trick_name">Nom</label>
-                {{ form_widget(trickForm.name) }}
-            </div>
+	<div class="container">
+		<h1>Ajouter un nouveau trick
+			<span style="font-size: 0.5em;">Vas-y, sois pas timide !</span>
+		</h1>
+		{{ form_start(trickForm) }}
 
-            <div class="form-group col-12 col-md-6">
-                <label for="trick_trickCategory">Catégorie</label>
-                {{ form_widget(trickForm.trickCategory) }}
-            </div>
-        </div>
+		<div class="my-custom-class-for-errors">
+			{{ form_errors(trickForm) }}
+		</div>
 
-        <div class="row">
-            <div class="form-group mb-2 col-12">
-                <label for="">Ajoute des images</label>
-                {% for image in trickForm.image %}
-                    {# The Folder.name field #}
-                    <div class="row form-group">
-                        {{ form_label(image.name, null, {'label_attr': {'class': 'col-md-2'}}) }}
-                        <div class="col col-md-10">{{ form_widget(image.name) }}</div>
-                        <div class="form_errors col-md-12">
-                            {{ form_errors(image.name) }}
-                        </div>
-                    </div>
-
-                    {# The Prototype to use for generating items of the Folder.documents collection #}
-                    <div id="filesProto" data-prototype="{{ form_widget(image.documents.vars.prototype)|e }}"></div>
-
-                    {# An empty (fro now) div which will later hold the generated document fields #}
-                    <div class="row">
-                        <div class="col col-xs-12" id="filesBox">
-                        </div>
-                    </div>
-                {% endfor %}
-
-            </div>
-
-            <div class="form-group mb-2 col-12">
-                <label for="">Ajoute des vidéos</label>
-                {{ form_widget(trickForm.video) }}
-            </div>
-        </div>
-
-        <div class="form-group mb-2">
-            <label for="trick_content">Contenu</label>
-            {{ form_widget(trickForm.content) }}
-        </div>
-
-        <button type="submit" class="btn btn-outline-primary">Ajouter mon trick !</button>
-
-        {{ form_end(trickForm) }}
-    </div>
+		<div class="row">
+			<div class="col-md-6">
+				{{ form_row(trickForm.name) }}
+			</div>
+			<div class="col-md-6">
+				{{ form_row(trickForm.trickCategory) }}
+			</div>
+			<div class="col-md-12">
+				{{ form_row(trickForm.content) }}
+			</div>
+			<div class="col-md-6">
+				{% for image in trickForm.image %}
+					{{ form_row(image.isRequired) }}
+				{% endfor %}
+				{{ form_row(trickForm.image) }}
+			</div>
+			<div class="col-md-6">
+				{{ form_row(trickForm.video) }}
+			</div>
+			<div class="col-md-12">
+				<button type="submit" class="btn btn-success">Créer la figure !</button>
+			</div>
+		</div>
+		{{ form_end(trickForm) }}
+	</div>
 
 {% endblock %}
-

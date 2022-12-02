@@ -16,6 +16,6 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "@a2lix/symfony-collection": "^0.4.0"
+        "@a2lix/symfony-collection": "^0.5.0"
     }
 }
