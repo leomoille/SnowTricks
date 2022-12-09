@@ -103,7 +103,6 @@ class TrickController extends AbstractController
         foreach ($trick->getImage() as $image) {
             $beforeImageList[] = $image->getName();
         }
-        dump('before list:', $beforeImageList);
 
         $form->handleRequest($request);
 
@@ -138,14 +137,15 @@ class TrickController extends AbstractController
             foreach ($trick->getImage() as $image) {
                 $afterImageList[] = $image->getName();
             }
-            dump('after list:', $afterImageList);
+
             foreach (array_diff($beforeImageList, $afterImageList) as $image) {
-                unlink($this->getParameter('kernel.project_dir').'/public/images/tricks/'.$image);
+                if ('trick-placeholder.jpg' !== $image && 'trick-placeholder-2.jpg' !== $image) {
+                    unlink($this->getParameter('kernel.project_dir').'/public/images/tricks/'.$image);
+                }
             }
 
             return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()], Response::HTTP_SEE_OTHER);
         }
-
 
         return $this->renderForm('trick/edit.html.twig', [
             'trick' => $trick,

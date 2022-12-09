@@ -11,9 +11,6 @@ class MessageFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        // $product = new Product();
-        // $manager->persist($product);
-
         $sentences = [
             'Quia aut aliquam ducimus dignissimos suscipit sit est sit sit.',
             'Sed efficitur viverra ex quis dictum. Vestibulum rutrum dui urna, vitae.',
