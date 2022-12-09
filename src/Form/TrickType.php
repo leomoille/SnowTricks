@@ -34,7 +34,7 @@ class TrickType extends AbstractType
             ])
             ->add('image', CollectionType::class, [
                 'label' => 'Photo(s) de la figure',
-                'help' => 'Utilisez uniquement des images aux formats .jpg, .jpeg ou .png',
+                'help' => 'Utilisez uniquement des images aux formats .jpg, .jpeg ou .png.',
                 'entry_type' => ImageType::class,
                 'entry_options' => ['label' => false],
                 'prototype' => true,
@@ -44,7 +44,7 @@ class TrickType extends AbstractType
             ])
             ->add('video', CollectionType::class, [
                 'label' => 'Vidéo(s) de la figure',
-                'help' => 'Utilisez uniquement le lien obtenu en cliquant sur le bouton de partage d\'une vidéo YouTube',
+                'help' => 'Utilisez uniquement le lien obtenu en cliquant sur le bouton de partage d\'une vidéo YouTube.',
                 'entry_type' => VideoType::class,
                 'entry_options' => ['label' => false],
                 'prototype' => true,

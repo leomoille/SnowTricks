@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Image;
 use App\Entity\Message;
 use App\Entity\Trick;
 use App\Entity\User;
@@ -10,16 +11,24 @@ use App\Form\TrickSearchType;
 use App\Form\TrickType;
 use App\Repository\MessageRepository;
 use App\Repository\TrickRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TrickController extends AbstractController
 {
+    private $slugger;
+
+    public function __construct(SluggerInterface $slugger)
+    {
+        $this->slugger = $slugger;
+    }
+
     /**
      * @Route("/tricks", name="app_tricks")
      */
@@ -29,8 +38,6 @@ class TrickController extends AbstractController
 
         $offset = max(0, $request->query->getInt('offset', 0));
         $paginator = $trickRepository->getTricksPaginator($offset);
-
-
 
         $form = $this->createForm(TrickSearchType::class);
 
@@ -45,12 +52,16 @@ class TrickController extends AbstractController
     /**
      * @Route("/tricks/{slug}", name="app_trick")
      */
-    public function trick(Request $request, Trick $trick, MessageRepository $messageRepository, EntityManagerInterface $manager): Response
-    {
+    public function trick(
+        Request $request,
+        Trick $trick,
+        MessageRepository $messageRepository,
+        EntityManagerInterface $manager
+    ): Response {
         $offset = max(0, $request->query->getInt('offset', 0));
         $paginator = $messageRepository->getMessagePaginator($trick, $offset);
 
-        $message = new Message;
+        $message = new Message();
 
         $form = $this->createForm(MessageType::class, $message, ['action' => '#comment-form']);
 
@@ -69,9 +80,12 @@ class TrickController extends AbstractController
 
             $manager->flush();
 
-            return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug(), '_fragment' => 'comment'], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute(
+                'app_trick',
+                ['slug' => $trick->getSlug(), '_fragment' => 'comment'],
+                Response::HTTP_SEE_OTHER
+            );
         }
-
 
         return $this->render('trick/trick.html.twig', [
             'trick' => $trick,
@@ -88,7 +102,6 @@ class TrickController extends AbstractController
     public function edit(Request $request, Trick $trick, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -116,11 +129,31 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $slugger = new AsciiSlugger();
+            $destination = $this->getParameter('kernel.project_dir').'/public/images/tricks';
 
-            $trick->setCreatedAt(new DateTime());
-            $trick->setSlug($slugger->slug($trick->getName()))
+            foreach ($form['image'] as $item) {
+                /** @var UploadedFile $uploadedFile */
+                $uploadedFile = $item['file']->getData();
+                dump($item['file']->getData());
+
+                $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = $this->slugger->slug($originalFilename)
+                    .'-'.uniqid()
+                    .'.'.$uploadedFile->guessClientExtension();
+
+                $item->getViewData()->setName($newFilename);
+
+                $uploadedFile->move(
+                    $destination,
+                    $newFilename
+                );
+            }
+
+            $trick
+                ->setCreatedAt(new \DateTime())
+                ->setSlug($this->slugger->slug($trick->getName()))
                 ->setAuthor($this->getUser());
+
             $manager->persist($trick);
 
             $manager->flush();

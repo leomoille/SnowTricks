@@ -1,10 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% form_theme trickForm with ['bootstrap_5_layout.html.twig', _self] %}
+{% form_theme trickForm with ['bootstrap_5_layout.html.twig'] %}
 
-{% block title %}
-	Ajouter une figure
-{% endblock %}
+{% block title %}Ajouter une figure{% endblock %}
 
 {# Image Collection #}
 {# {% block _trick_image_entry_widget %}
@@ -15,40 +13,41 @@
 {% endblock %} #}
 
 {% block body %}
-	<div class="container">
-		<h1>Ajouter un nouveau trick
-			<span style="font-size: 0.5em;">Vas-y, sois pas timide !</span>
-		</h1>
-		{{ form_start(trickForm) }}
+    <div class="container">
+        <h1>Ajouter un nouveau trick
+            <span style="font-size: 0.5em;">Vas-y, sois pas timide !</span>
+        </h1>
+        {{ form_start(trickForm) }}
 
-		<div class="my-custom-class-for-errors">
-			{{ form_errors(trickForm) }}
-		</div>
+        <div class="my-custom-class-for-errors">
+            {{ form_errors(trickForm) }}
+        </div>
 
-		<div class="row">
-			<div class="col-md-6">
-				{{ form_row(trickForm.name) }}
-			</div>
-			<div class="col-md-6">
-				{{ form_row(trickForm.trickCategory) }}
-			</div>
-			<div class="col-md-12">
-				{{ form_row(trickForm.content) }}
-			</div>
-			<div class="col-md-6">
-				{% for image in trickForm.image %}
-					{{ form_row(image.isRequired) }}
-				{% endfor %}
-				{{ form_row(trickForm.image) }}
-			</div>
-			<div class="col-md-6">
-				{{ form_row(trickForm.video) }}
-			</div>
-			<div class="col-md-12">
-				<button type="submit" class="btn btn-success">Créer la figure !</button>
-			</div>
-		</div>
-		{{ form_end(trickForm) }}
-	</div>
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(trickForm.name) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(trickForm.trickCategory) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{ form_row(trickForm.content) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(trickForm.image) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(trickForm.video) }}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <button id="button-send-trick" type="submit" class="btn btn-success">Créer la figure !</button>
+        </div>
 
+        {{ form_end(trickForm) }}
+    </div>
 {% endblock %}

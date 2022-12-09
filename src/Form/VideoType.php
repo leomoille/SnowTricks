@@ -13,7 +13,9 @@ class VideoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('url', UrlType::class);
+            ->add('url', UrlType::class, [
+                'label' => 'Lien de partage YouTube',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

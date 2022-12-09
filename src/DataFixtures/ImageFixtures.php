@@ -11,7 +11,7 @@ class ImageFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        $images = ['snow.jpg', 'snow-2.jpg'];
+        $images = ['trick-placeholder.jpg', 'trick-placeholder-2.jpg'];
 
         for ($i = 0; $i < count(TrickFixtures::TRICK_REFERENCE); ++$i) {
             $set = null;

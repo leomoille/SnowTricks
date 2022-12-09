@@ -1,120 +1,127 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ trick.name }}
+    {{ trick.name }}
 {% endblock %}
 
 {% block body %}
-	{# HEADER #}
-	<header class="tricks-header" style="background: url('{{ asset('images/snow.jpg') }}') no-repeat; background-size: cover;">
-		<h1 class="text-center">
-			{{ trick.name }}
-		</h1>
-		<div class="row g-2 justify-content-center">
-			<div class="col-auto">
-				<a href="{{ path('app_edit_trick', {slug: trick.slug}) }}" class="btn btn-dark">Modifier</a>
-			</div>
-			<div class="col-auto">
-				<a href="#" class="btn btn-danger">Supprimer</a>
-			</div>
-		</div>
+    {# HEADER #}
+    {#    TODO: Ajouter l'image mise en avant #}
+    <header class="tricks-header"
+            style="background: url('{{ asset('/images/tricks/trick-placeholder-2.jpg') }}') no-repeat; background-size: cover;">
+        <h1 class="text-center">
+            {{ trick.name }}
+        </h1>
+        <div class="row g-2 justify-content-center">
+            <div class="col-auto">
+                <a href="{{ path('app_edit_trick', {slug: trick.slug}) }}" class="btn btn-dark">Modifier</a>
+            </div>
+            <div class="col-auto">
+                <a href="#" class="btn btn-danger">Supprimer</a>
+            </div>
+        </div>
 
-	</header>
+    </header>
 
-	<div class="container">
-		{# SECTION MEDIA #}
-		<section class="row g-2 justify-content-center mt-2 mb-5">
-			{% if trick.image is not empty %}
-				{% for image in trick.image %}
-					<div class="col-auto">
-						<img class="img-fluid" style="height: 150px;" src="{{ asset('/images/tricks/'~image.name) }}" alt="">
-					</div>
-				{% endfor %}
-			{% else %}
-				<p>Aucune image !</p>
-			{% endif %}
+    <div class="container">
+        {# SECTION MEDIA #}
+        <section class="row g-2 justify-content-center mt-2 mb-5">
+            {% if trick.image is not empty %}
+                {% for image in trick.image %}
+                    <div class="col-auto">
+                        <img class="img-fluid" style="height: 150px;" src="{{ asset('/images/tricks/'~image.name) }}"
+                             alt="">
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Aucune image !</p>
+            {% endif %}
 
 
-			{% if trick.video is not empty %}
-				{% for video in trick.video %}
-					{# <p class="h5">{{ video.name }}</p> #}
-					<div class="col-auto">
-						<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video.url | split('=', 2)[1] }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-					</div>
-				{% endfor %}
-			{% else %}
-				<p>Aucune vidéo !</p>
-			{% endif %}
+            {% if trick.video is not empty %}
+                {% for video in trick.video %}
+                    {# <p class="h5">{{ video.name }}</p> #}
+                    <div class="col-auto">
+                        <iframe class="embed-responsive-item"
+                                src="https://www.youtube.com/embed/{{ video.url | split('=', 2)[1] }}"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Aucune vidéo !</p>
+            {% endif %}
 
-		</section>
+        </section>
 
-		{# CONTENU TEXT #}
-		<article class="mb-5">
-			<p class="text-center">{{ trick.content }}</p>
-		</article>
+        {# CONTENU TEXT #}
+        <article class="mb-5">
+            <p class="text-center">{{ trick.content }}</p>
+        </article>
 
-		<aside>
-			<p class="text-center">
-				<span class="badge bg-info fs-6">{{ trick.trickCategory.name }}</span>
-				<span class="badge bg-info fs-6">Ajoutée le
+        <aside>
+            <p class="text-center">
+                <span class="badge bg-info fs-6">{{ trick.trickCategory.name }}</span>
+                <span class="badge bg-info fs-6">Ajoutée le
 					{{ trick.createdAt | date('d/m/Y') }}</span>
-				<span class="badge bg-info fs-6">Dernière modification le 00/00/0000 à 00h00</span>
-			</p>
-		</aside>
+                <span class="badge bg-info fs-6">Dernière modification le 00/00/0000 à 00h00</span>
+            </p>
+        </aside>
 
-		<hr style="width: 70%; margin: auto;">
-		<section class="mt-4" id="comment-form">
-			<h2 class="text-center">Laisse un commentaire</h2>
-			{% if app.user %}
-			{{ form_start(form) }}
-			<div class="row g-2 justify-content-center mt-4 mb-3">
-				<div class="col-6">
-					{{ form_widget(form.content) }}
-				</div>
-				<div class="col-auto">
-					<button type="submit" class="btn btn-primary mb-3">Envoyer !</button>
-				</div>
-			</div>
-			{{ form_end(form) }}
-			{% else %}
-				<p class="text-center">Vous devez être connecté.e pour pouvoir commenter !</p>
-			{% endif %}
-		</section>
-		<hr
-		style="width: 70%; margin: auto;">
+        <hr style="width: 70%; margin: auto;">
+        <section class="mt-4" id="comment-form">
+            <h2 class="text-center">Laisse un commentaire</h2>
+            {% if app.user %}
+                {{ form_start(form) }}
+                <div class="row g-2 justify-content-center mt-4 mb-3">
+                    <div class="col-6">
+                        {{ form_widget(form.content) }}
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary mb-3">Envoyer !</button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            {% else %}
+                <p class="text-center">Vous devez être connecté.e pour pouvoir commenter !</p>
+            {% endif %}
+        </section>
+        <hr
+                style="width: 70%; margin: auto;">
 
-		{# Comments list #}
-		<section class="mt-4" id="comment">
-			{% for message in messages %}
-				<div class="row g-3 justify-content-center align-items-center mb-4">
-					<div class="col-auto">
-						<img src="{{asset('images/avatar/')~message.author.avatar}}" alt="" style="object-fit: cover;" width="64" height="64" class="rounded-circle">
-					</div>
-					<div class="col-8">
-						<p>
-							<span class="h5">{{message.author.username}}</span>
-							<span class="small">(le
-								{{message.publicationDate | date("d/m/Y à H:i")}})</span>
-						</p>
-						<p>{{message.content}}</p>
-					</div>
-				</div>
-			{% endfor %}
+        {# Comments list #}
+        <section class="mt-4" id="comment">
+            {% for message in messages %}
+                <div class="row g-3 justify-content-center align-items-center mb-4">
+                    <div class="col-auto">
+                        <img src="{{ asset('images/avatar/')~message.author.avatar }}" alt="" style="object-fit: cover;"
+                             width="64" height="64" class="rounded-circle">
+                    </div>
+                    <div class="col-8">
+                        <p>
+                            <span class="h5">{{ message.author.username }}</span>
+                            <span class="small">(le
+								{{ message.publicationDate | date("d/m/Y à H:i") }})</span>
+                        </p>
+                        <p>{{ message.content }}</p>
+                    </div>
+                </div>
+            {% endfor %}
 
-			<div class="row justify-content-center">
-				{% if previous >= 0 %}
-					<div class="col-auto">
-						<a class="btn btn-dark" href="{{ path('app_trick', { slug: trick.slug, offset: previous }) }}">Precédent</a>
-					</div>
+            <div class="row justify-content-center">
+                {% if previous >= 0 %}
+                    <div class="col-auto">
+                        <a class="btn btn-dark" href="{{ path('app_trick', { slug: trick.slug, offset: previous }) }}">Precédent</a>
+                    </div>
 
-				{% endif %}
-				{% if next < messages|length %}
-					<div class="col-auto">
-						<a class="btn btn-dark" href="{{ path('app_trick', { slug: trick.slug, offset: next }) }}">Suivant</a>
-					</div>
+                {% endif %}
+                {% if next < messages|length %}
+                    <div class="col-auto">
+                        <a class="btn btn-dark" href="{{ path('app_trick', { slug: trick.slug, offset: next }) }}">Suivant</a>
+                    </div>
 
-				{% endif %}
-			</div>
-		</section>
-	</div>
+                {% endif %}
+            </div>
+        </section>
+    </div>
 {% endblock %}
