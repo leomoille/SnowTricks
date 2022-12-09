@@ -18,6 +18,11 @@ class TrickCategoryFixtures extends Fixture implements FixtureGroupInterface
 
     // ASCIISluger à instencier dans le constructeur
 
+    public static function getGroups(): array
+    {
+        return ['user'];
+    }
+
     public function load(ObjectManager $manager): void
     {
         $categories = ['Catégorie Une', 'Catégorie Deux', 'Catégorie Trois'];
@@ -35,10 +40,5 @@ class TrickCategoryFixtures extends Fixture implements FixtureGroupInterface
         }
 
         $manager->flush();
-    }
-
-    public static function getGroups(): array
-    {
-        return ['user'];
     }
 }

@@ -38,7 +38,8 @@ class UserController extends AbstractController
             $destination = $this->getParameter('kernel.project_dir').'/public/images/avatar';
 
             $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
-            $newFilename = $this->slugger->slug($originalFilename).'-'.uniqid().'.'.$uploadedFile->guessClientExtension();
+            $newFilename = $this->slugger->slug($originalFilename).'-'.uniqid().'.'.$uploadedFile->guessClientExtension(
+            );
 
             $uploadedFile->move(
                 $destination,

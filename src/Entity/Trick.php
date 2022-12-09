@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\TrickRepository;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -210,12 +209,12 @@ class Trick
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTimeInterface $CreatedAt): self
+    public function setCreatedAt(\DateTimeInterface $CreatedAt): self
     {
         $this->createdAt = $CreatedAt;
 

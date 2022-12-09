@@ -8,7 +8,6 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
-
 class TrickFixtures extends Fixture implements DependentFixtureInterface
 {
     public const TRICK_REFERENCE = [
@@ -80,7 +79,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         ];
         $slugger = new AsciiSlugger();
 
-        for ($i = 0; $i < count($tricksList); $i++) {
+        for ($i = 0; $i < count($tricksList); ++$i) {
             $date = date('Y-m-d H:i:s', mt_rand(1644102000, 1651788000));
             $trick = new Trick();
 

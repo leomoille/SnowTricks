@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\MessageRepository;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -59,12 +58,12 @@ class Message
         return $this;
     }
 
-    public function getPublicationDate(): ?DateTimeInterface
+    public function getPublicationDate(): ?\DateTimeInterface
     {
         return $this->publicationDate;
     }
 
-    public function setPublicationDate(DateTimeInterface $publicationDate): self
+    public function setPublicationDate(\DateTimeInterface $publicationDate): self
     {
         $this->publicationDate = $publicationDate;
 
