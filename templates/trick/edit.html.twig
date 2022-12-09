@@ -2,27 +2,20 @@
 {% form_theme trickForm with ['bootstrap_5_layout.html.twig', _self] %}
 
 {% block _trick_images_list_entry_file_row %}
-    {% set trick = form.parent.parent.parent.vars.value %}
-    {% set imageAmount = trick.image|length %}
-    {% set currentImage = form.vars.id |split('_')[2]|number_format %}
-    {% set currentImageName = form.vars.id %}
+    {% set trick = form.parent.parent.parent.vars.form.children.image.children|length %}
+    {% set currentImage = form.vars.id |split('_')[2] %}
 
-    {{ dump('imageAmount', imageAmount) }}
-    {{ dump('currentImage', currentImage) }}
-    {{ dump('currentImageFullName', currentImageName) }}
-
-    {% if currentImage|number_format+1 <= imageAmount|number_format %}
+    {% if currentImage is not empty %}
+        {% set currentImage = form.vars.id |split('_')[2]|number_format %}
+        {% set trick = form.parent.parent.parent.vars.value %}
         <img class="img-thumbnail" src="{{ asset('/images/tricks/'~trick.image[currentImage].name) }}">
     {% else %}
         {{ block('integer_widget') }}
     {% endif %}
-
 {% endblock %}
 
 
-{% block title %}
-    Modifier une figure
-{% endblock %}
+{% block title %}Modifier une figure{% endblock %}
 
 {% block body %}
     <div class="container">

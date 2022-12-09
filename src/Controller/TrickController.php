@@ -32,8 +32,6 @@ class TrickController extends AbstractController
      */
     public function tricks(Request $request, TrickRepository $trickRepository): Response
     {
-        // $lastTricks = $trickRepository->findAll();
-
         $offset = max(0, $request->query->getInt('offset', 0));
         $paginator = $trickRepository->getTricksPaginator($offset);
 
@@ -95,20 +93,59 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/trick/{slug}/editer", name="app_edit_trick", methods={"GET", "POST"})
+     * @Route("/tricks/{slug}/editer", name="app_edit_trick", methods={"GET", "POST"})
      */
     public function edit(Request $request, Trick $trick, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
+
+        $beforeImageList = [];
+        foreach ($trick->getImage() as $image) {
+            $beforeImageList[] = $image->getName();
+        }
+        dump('before list:', $beforeImageList);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manager->persist($trick);
+            $destination = $this->getParameter('kernel.project_dir').'/public/images/tricks';
 
+            foreach ($form['image'] as $item) {
+                if (isset($item['file']) && !empty($item['file']->getData())) {
+                    /** @var UploadedFile $uploadedFile */
+                    $uploadedFile = $item['file']->getData();
+
+                    $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $newFilename = $this->slugger->slug($originalFilename)
+                        .'-'.uniqid()
+                        .'.'.$uploadedFile->guessClientExtension();
+
+                    $item->getViewData()->setName($newFilename);
+
+                    $uploadedFile->move(
+                        $destination,
+                        $newFilename
+                    );
+                }
+            }
+
+            $trick->setUpdatedAt(new \DateTimeImmutable());
+
+            $manager->persist($trick);
             $manager->flush();
+
+            $afterImageList = [];
+            foreach ($trick->getImage() as $image) {
+                $afterImageList[] = $image->getName();
+            }
+            dump('after list:', $afterImageList);
+            foreach (array_diff($beforeImageList, $afterImageList) as $image) {
+                unlink($this->getParameter('kernel.project_dir').'/public/images/tricks/'.$image);
+            }
 
             return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()], Response::HTTP_SEE_OTHER);
         }
+
 
         return $this->renderForm('trick/edit.html.twig', [
             'trick' => $trick,

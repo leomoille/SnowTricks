@@ -6,12 +6,20 @@
 
 {% block body %}
     {# HEADER #}
-    {#    TODO: Ajouter l'image mise en avant #}
+    {% set featuredImage = '' %}
+    {% for image in trick.image %}
+        {% if image.isFeatured %}
+            {{ dump(asset('/images/tricks/'~image.name)) }}
+            {% set featuredImage = asset('/images/tricks/'~image.name) %}
+            {{ dump(featuredImage) }}
+        {% endif %}
+    {% endfor %}
     <header class="tricks-header"
-            style="background: url('{{ asset('/images/tricks/trick-placeholder-2.jpg') }}') no-repeat; background-size: cover;">
+            style="background: url('{{ featuredImage }}') no-repeat; background-size: cover;">
         <h1 class="text-center">
             {{ trick.name }}
         </h1>
+
         <div class="row g-2 justify-content-center">
             <div class="col-auto">
                 <a href="{{ path('app_edit_trick', {slug: trick.slug}) }}" class="btn btn-dark">Modifier</a>
@@ -63,8 +71,10 @@
             <p class="text-center">
                 <span class="badge bg-info fs-6">{{ trick.trickCategory.name }}</span>
                 <span class="badge bg-info fs-6">Ajoutée le
-					{{ trick.createdAt | date('d/m/Y') }}</span>
-                <span class="badge bg-info fs-6">Dernière modification le 00/00/0000 à 00h00</span>
+					{{ trick.createdAt | date('d/m/Y à H:i') }}</span>
+                {% if trick.updatedAt %}
+                <span class="badge bg-info fs-6">Dernière modification le {{ trick.updatedAt | date('d/m/Y à H:i') }}</span>
+                {% endif %}
             </p>
         </aside>
 
