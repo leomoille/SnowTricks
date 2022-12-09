@@ -41,6 +41,7 @@ class TrickType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
+                'block_name' => 'images_list',
             ])
             ->add('video', CollectionType::class, [
                 'label' => 'Vidéo(s) de la figure',
