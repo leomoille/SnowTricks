@@ -9,9 +9,7 @@
     {% set featuredImage = '' %}
     {% for image in trick.image %}
         {% if image.isFeatured %}
-            {{ dump(asset('/images/tricks/'~image.name)) }}
             {% set featuredImage = asset('/images/tricks/'~image.name) %}
-            {{ dump(featuredImage) }}
         {% endif %}
     {% endfor %}
     <header class="tricks-header"
