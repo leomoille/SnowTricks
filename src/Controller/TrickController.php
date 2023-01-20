@@ -8,8 +8,10 @@ use App\Entity\User;
 use App\Form\MessageType;
 use App\Form\TrickSearchType;
 use App\Form\TrickType;
+use App\Repository\ImageRepository;
 use App\Repository\MessageRepository;
 use App\Repository\TrickRepository;
+use App\Repository\VideoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -202,5 +204,20 @@ class TrickController extends AbstractController
                 'trickForm' => $form->createView(),
             ]
         );
+    }
+
+    /**
+     * @Route("/trick/supprimer/{slug}", name="app_remove_trick")
+     */
+    public function delete(
+        Trick $trick,
+        TrickRepository $trickRepository,
+        ImageRepository $imageRepository,
+        VideoRepository $videoRepository,
+        MessageRepository $messageRepository
+    ): Response {
+        $trickRepository->remove($trick, $messageRepository, $imageRepository, $videoRepository);
+
+        return $this->redirectToRoute('app_tricks');
     }
 }
