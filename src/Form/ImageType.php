@@ -18,6 +18,7 @@ class ImageType extends AbstractType
             ->add('file', FileType::class, [
                 'label' => false,
                 'required' => true,
+                'mapped' => false,
                 'constraints' => [
                     new File(),
                 ],
@@ -25,6 +26,7 @@ class ImageType extends AbstractType
             ->add('isFeatured', CheckboxType::class, [
                 'label' => 'Utiliser comme bannière',
                 'required' => false,
+                'attr' => ['class' => 'isFeaturedCheck'],
             ]);
     }
 

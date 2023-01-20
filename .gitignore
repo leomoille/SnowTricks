@@ -1,11 +1,12 @@
 .idea
+todo.md
 
 public/images/avatar/*
 !public/images/avatar/user-placeholder.png
 
 public/images/tricks/*
-!public/images/tricks/snow.jpg
-!public/images/tricks/snow-2.jpg
+!public/images/tricks/trick-placeholder.jpg
+!public/images/tricks/trick-placeholder-2.jpg
 
 ###> symfony/framework-bundle ###
 /.env.local

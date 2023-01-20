@@ -41,6 +41,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
     /**
      * @var string The hashed password
+     *
      * @ORM\Column(type="string")
      * @Assert\Length(min="8", minMessage="Votre mot de passe doit contenir au minimum 8 caractères")
      */
@@ -65,7 +66,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $activationToken;
-
 
     /**
      * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="author", orphanRemoval=true)

@@ -21,6 +21,7 @@ class UserController extends AbstractController
     {
         $this->slugger = $slugger;
     }
+
     /**
      * @Route("/user", name="app_user")
      */
@@ -34,10 +35,11 @@ class UserController extends AbstractController
             /** @var UploadedFile $uploadedFile */
             $uploadedFile = $form['avatarFile']->getData();
 
-            $destination = $this->getParameter('kernel.project_dir') . '/public/images/avatar';
+            $destination = $this->getParameter('kernel.project_dir').'/public/images/avatar';
 
             $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
-            $newFilename = $this->slugger->slug($originalFilename) . '-' . uniqid() . '.' . $uploadedFile->guessClientExtension();
+            $newFilename = $this->slugger->slug($originalFilename).'-'.uniqid().'.'.$uploadedFile->guessClientExtension(
+            );
 
             $uploadedFile->move(
                 $destination,
@@ -48,10 +50,10 @@ class UserController extends AbstractController
             $user = $this->getUser();
 
             // If user already as an Avatar, delete old file
-            if ($user->getAvatar() !== 'user-placeholder.png') {
-                $path = $this->getParameter("avatar_directory") . '/' . $user->getAvatar();
+            if ('user-placeholder.png' !== $user->getAvatar()) {
+                $path = $this->getParameter('avatar_directory').'/'.$user->getAvatar();
 
-                /** @var Filesystem $filesystem */
+                /* @var Filesystem $filesystem */
                 $filesystem->remove($path);
             }
 
@@ -65,7 +67,7 @@ class UserController extends AbstractController
 
         return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController',
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 }

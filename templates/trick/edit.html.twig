@@ -1,44 +1,52 @@
 {% extends 'base.html.twig' %}
-{% form_theme trickForm 'bootstrap_5_layout.html.twig' %}
+{% form_theme trickForm with ['bootstrap_5_layout.html.twig', _self] %}
 
-{% block title %}
-    Modifier une figure
+{% block _trick_images_list_entry_file_row %}
+    {% set currentImage = form.vars.id | split('_')[2] %}
+
+    {% if currentImage is not empty %}
+        {% set trick = form.parent.parent.parent.vars.value %}
+        <img class="img-thumbnail" src="{{ asset('/images/tricks/'~trick.image[currentImage| number_format].name) }}">
+    {% else %}
+        {{ block('form_widget') }}
+    {% endif %}
 {% endblock %}
+
+{% block title %}Modifier une figure{% endblock %}
 
 {% block body %}
     <div class="container">
         <h1>Modifier un trick <span style="font-size: 0.5em;">Vas-y, sois pas timide !</span></h1>
         {{ form_start(trickForm) }}
-        <div class="row mb-2">
-            <div class="form-group col-12 col-md-6">
-                <label for="trick_name">Nom</label>
-                {{ form_widget(trickForm.name) }}
-            </div>
 
-            <div class="form-group col-12 col-md-6">
-                <label for="trick_trickCategory">Catégorie</label>
-                {{ form_widget(trickForm.trickCategory) }}
-            </div>
-        </div>
-
-        <div class="form-group mb-2">
-            <label for="trick_content">Contenu</label>
-            {{ form_widget(trickForm.content) }}
+        <div class="my-custom-class-for-errors">
+            {{ form_errors(trickForm) }}
         </div>
 
         <div class="row">
-            <div class="form-group mb-2 col-12">
-                {{ form_widget(trickForm.image) }}
+            <div class="col-md-6">
+                {{ form_row(trickForm.name) }}
             </div>
-
-            <div class="form-group mb-2 col-12">
-                <label for="">Ajoute des vidéos</label>
-                {{ form_widget(trickForm.video) }}
+            <div class="col-md-6">
+                {{ form_row(trickForm.trickCategory) }}
             </div>
         </div>
-
-
-        <button type="submit" class="btn btn-outline-primary">Modifier le trick !</button>
+        <div class="row">
+            <div class="col-md-12">
+                {{ form_row(trickForm.content) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(trickForm.image) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(trickForm.video) }}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <button id="button-send-trick" type="submit" class="btn btn-success">Mettre à jour la figure !</button>
+        </div>
 
         {{ form_end(trickForm) }}
     </div>

@@ -19,9 +19,7 @@
         {% endfor %}
     </div>
 {% endif %}
-{# 
-TODO - À retirer - Utiliser plutot UsercheckerInterface
-#}
+{# TODO - À retirer - Utiliser plutot UsercheckerInterface #}
 {% if app.user and app.user.isActivated != 1 %}
     <div class="alert alert-info" role="alert">
         Ton compte n'es toujours pas activé... Regarde bien tes mails !

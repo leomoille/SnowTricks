@@ -19,6 +19,11 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         $this->userPasswordHasherInterface = $userPasswordHasherInterface;
     }
 
+    public static function getGroups(): array
+    {
+        return ['user'];
+    }
+
     public function load(ObjectManager $manager): void
     {
         $user = new User();
@@ -33,10 +38,5 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         $manager->flush();
 
         $this->addReference(self::USER_REFERENCE, $user);
-    }
-
-    public static function getGroups(): array
-    {
-        return ['user'];
     }
 }

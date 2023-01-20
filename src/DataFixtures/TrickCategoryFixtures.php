@@ -11,23 +11,27 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 class TrickCategoryFixtures extends Fixture implements FixtureGroupInterface
 {
     public const TRICKCATEGORY_REFFERENCE = [
-        'trick-category-one',
-        'trick-category-two',
-        'trick-category-tree',
+        'grab',
+        'flip',
+        'slide',
     ];
 
-    // ASCIISluger à instencier dans le constructeur
+    // TODO: ASCIISluger à instancier dans le constructeur
+
+    public static function getGroups(): array
+    {
+        return ['user'];
+    }
 
     public function load(ObjectManager $manager): void
     {
-        $categories = ['Catégorie Une', 'Catégorie Deux', 'Catégorie Trois'];
         $slugger = new AsciiSlugger();
 
-        for ($i = 0; $i < count($categories); ++$i) {
+        for ($i = 0; $i < count(self::TRICKCATEGORY_REFFERENCE); ++$i) {
             $trickCategory = new TrickCategory();
 
-            $trickCategory->setName($categories[$i])
-                ->setSlug($slugger->slug(strtolower($categories[$i])));
+            $trickCategory->setName(ucfirst(self::TRICKCATEGORY_REFFERENCE[$i]))
+                ->setSlug($slugger->slug(strtolower(self::TRICKCATEGORY_REFFERENCE[$i])));
 
             $manager->persist($trickCategory);
 
@@ -35,10 +39,5 @@ class TrickCategoryFixtures extends Fixture implements FixtureGroupInterface
         }
 
         $manager->flush();
-    }
-
-    public static function getGroups(): array
-    {
-        return ['user'];
     }
 }
