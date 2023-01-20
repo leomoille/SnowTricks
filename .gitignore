@@ -1,4 +1,5 @@
 .idea
+todo.md
 
 public/images/avatar/*
 !public/images/avatar/user-placeholder.png
