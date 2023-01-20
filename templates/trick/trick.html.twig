@@ -23,7 +23,7 @@
                 <a href="{{ path('app_edit_trick', {slug: trick.slug}) }}" class="btn btn-dark">Modifier</a>
             </div>
             <div class="col-auto">
-                <a href="#" class="btn btn-danger">Supprimer</a>
+                <a href="{{ path('app_remove_trick', {slug: trick.slug}) }}" class="btn btn-danger">Supprimer</a>
             </div>
         </div>
 

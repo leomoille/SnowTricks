@@ -17,7 +17,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TrickRepository extends ServiceEntityRepository
 {
-
     public const PAGINATOR_PER_PAGE = 6;
 
     public function __construct(ManagerRegistry $registry)
@@ -52,8 +51,25 @@ class TrickRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function remove(Trick $entity, bool $flush = true): void
-    {
+    public function remove(
+        Trick $entity,
+        MessageRepository $messageRepository,
+        ImageRepository $imageRepository,
+        VideoRepository $videoRepository,
+        bool $flush = true
+    ): void {
+        foreach ($entity->getMessages() as $message) {
+            $messageRepository->remove($message);
+        }
+
+        foreach ($entity->getImage() as $image) {
+            $imageRepository->remove($image);
+        }
+
+        foreach ($entity->getVideo() as $video) {
+            $videoRepository->remove($video);
+        }
+
         $this->_em->remove($entity);
         if ($flush) {
             $this->_em->flush();

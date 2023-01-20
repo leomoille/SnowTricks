@@ -16,9 +16,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ImageRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private string $imagePath;
+
+    public function __construct(ManagerRegistry $registry, string $path)
     {
         parent::__construct($registry, Image::class);
+        $this->imagePath = $path;
     }
 
     /**
@@ -39,6 +42,7 @@ class ImageRepository extends ServiceEntityRepository
      */
     public function remove(Image $entity, bool $flush = true): void
     {
+        unlink($this->imagePath.'/'.$entity->getName());
         $this->_em->remove($entity);
         if ($flush) {
             $this->_em->flush();
