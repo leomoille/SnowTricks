@@ -195,7 +195,7 @@ class TrickController extends AbstractController
 
             $manager->flush();
 
-            return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()]);
+            return $this->redirectToRoute('app_tricks');
         }
 
         return $this->render(
