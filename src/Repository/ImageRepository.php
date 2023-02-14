@@ -42,10 +42,12 @@ class ImageRepository extends ServiceEntityRepository
      */
     public function remove(Image $entity, bool $flush = true): void
     {
-        unlink($this->imagePath.'/'.$entity->getName());
-        $this->_em->remove($entity);
-        if ($flush) {
-            $this->_em->flush();
+        if ('trick-placeholder.jpg' !== $entity->getName() && 'trick-placeholder-2.jpg' !== $entity->getName()) {
+            unlink($this->imagePath.'/'.$entity->getName());
+            $this->_em->remove($entity);
+            if ($flush) {
+                $this->_em->flush();
+            }
         }
     }
 

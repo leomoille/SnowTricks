@@ -12,9 +12,9 @@ use App\Repository\ImageRepository;
 use App\Repository\MessageRepository;
 use App\Repository\TrickRepository;
 use App\Repository\VideoRepository;
+use App\Service\TrickImageUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +22,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TrickController extends AbstractController
 {
-    private $slugger;
+    private SluggerInterface $slugger;
 
     public function __construct(SluggerInterface $slugger)
     {
@@ -97,8 +97,12 @@ class TrickController extends AbstractController
     /**
      * @Route("/tricks/{slug}/editer", name="app_edit_trick", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Trick $trick, EntityManagerInterface $manager): Response
-    {
+    public function edit(
+        Request $request,
+        Trick $trick,
+        EntityManagerInterface $manager,
+        TrickImageUploader $imageUploader
+    ): Response {
         $form = $this->createForm(TrickType::class, $trick);
 
         $beforeImageList = [];
@@ -109,26 +113,10 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $destination = $this->getParameter('kernel.project_dir').'/public/images/tricks';
-
-            foreach ($form['image'] as $item) {
-                if (isset($item['file']) && !empty($item['file']->getData())) {
-                    /** @var UploadedFile $uploadedFile */
-                    $uploadedFile = $item['file']->getData();
-
-                    $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    $newFilename = $this->slugger->slug($originalFilename)
-                        .'-'.uniqid()
-                        .'.'.$uploadedFile->guessClientExtension();
-
-                    $item->getViewData()->setName($newFilename);
-
-                    $uploadedFile->move(
-                        $destination,
-                        $newFilename
-                    );
-                }
-            }
+            $imageUploader->upload(
+                $form['image'],
+                $this->getParameter('kernel.project_dir').'/public/images/tricks'
+            );
 
             $trick->setUpdatedAt(new \DateTimeImmutable());
 
@@ -146,19 +134,21 @@ class TrickController extends AbstractController
                 }
             }
 
+            $this->addFlash('success', 'La figure a bien été modifiée !');
+
             return $this->redirectToRoute('app_trick', ['slug' => $trick->getSlug()], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('trick/edit.html.twig', [
+        return $this->render('trick/edit.html.twig', [
             'trick' => $trick,
-            'trickForm' => $form,
+            'trickForm' => $form->createView(),
         ]);
     }
 
     /**
      * @Route("/trick/ajouter", name="app_add_trick")
      */
-    public function add(Request $request, EntityManagerInterface $manager): Response
+    public function add(Request $request, EntityManagerInterface $manager, TrickImageUploader $imageUploader): Response
     {
         $trick = new Trick();
 
@@ -166,25 +156,10 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $destination = $this->getParameter('kernel.project_dir').'/public/images/tricks';
-
-            foreach ($form['image'] as $item) {
-                /** @var UploadedFile $uploadedFile */
-                $uploadedFile = $item['file']->getData();
-                dump($item['file']->getData());
-
-                $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $newFilename = $this->slugger->slug($originalFilename)
-                    .'-'.uniqid()
-                    .'.'.$uploadedFile->guessClientExtension();
-
-                $item->getViewData()->setName($newFilename);
-
-                $uploadedFile->move(
-                    $destination,
-                    $newFilename
-                );
-            }
+            $imageUploader->upload(
+                $form['image'],
+                $this->getParameter('kernel.project_dir').'/public/images/tricks'
+            );
 
             $trick
                 ->setCreatedAt(new \DateTime())
@@ -194,6 +169,8 @@ class TrickController extends AbstractController
             $manager->persist($trick);
 
             $manager->flush();
+
+            $this->addFlash('success', 'Ta figure a bien été créée !');
 
             return $this->redirectToRoute('app_tricks');
         }
@@ -217,6 +194,8 @@ class TrickController extends AbstractController
         MessageRepository $messageRepository
     ): Response {
         $trickRepository->remove($trick, $messageRepository, $imageRepository, $videoRepository);
+
+        $this->addFlash('success', 'La figure a bien été supprimée !');
 
         return $this->redirectToRoute('app_tricks');
     }
