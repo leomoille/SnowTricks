@@ -30,20 +30,17 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $tricksList = [
             [
                 'name' => 'Melon Grab',
-                'content' => 'La main avant sur le bord de votre talon entre vos fixations et voilà, 
-                on dirait un melon.',
+                'content' => 'La main avant sur le bord de votre talon entre vos fixations et voilà, on dirait un melon.',
                 'group' => '0',
             ],
             [
                 'name' => 'Mute Grab',
-                'content' => 'Essayez d’attraper le bord de l’orteil entre vos pieds avec votre main avant. 
-                C’est un Mute Grab.',
+                'content' => 'Essayez d’attraper le bord de l’orteil entre vos pieds avec votre main avant. C’est un Mute Grab.',
                 'group' => '0',
             ],
             [
                 'name' => 'Indy Grab',
-                'content' => 'Laissez votre bras arrière tomber entre vos genoux pour saisir la planche qui approche. 
-                C’est un Indy.',
+                'content' => 'Laissez votre bras arrière tomber entre vos genoux pour saisir la planche qui approche. C’est un Indy.',
                 'group' => '0',
             ],
             [
@@ -53,9 +50,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
             ],
             [
                 'name' => 'Noseslide',
-                'content' => 'C\'est un jib que le rider effectue sur le nose de la planche, soit la spatule qui se 
-                trouve devant lui. La spatule arrière s\'appelle le tail. Le noseslide peut 
-                être frontside ou backside.',
+                'content' => 'C\'est un jib que le rider effectue sur le nose de la planche, soit la spatule qui se trouve devant lui. La spatule arrière s\'appelle le tail. Le noseslide peut être frontside ou backside.',
                 'group' => '2',
             ],
             [
@@ -65,43 +60,32 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
             ],
             [
                 'name' => 'Lipslide',
-                'content' => 'Le lispslide consiste à glisser sur un obstacle en mettant la planche perpendiculaire à 
-                celui-ci. Un jib à 90 degrés en d\'autres termes. Le lipslide peut se faire en avant ou en arrière. 
-                Frontside ou backside, donc.',
+                'content' => 'Le lispslide consiste à glisser sur un obstacle en mettant la planche perpendiculaire à celui-ci. Un jib à 90 degrés en d\'autres termes. Le lipslide peut se faire en avant ou en arrière. Frontside ou backside, donc.',
                 'group' => '2',
             ],
             [
                 'name' => 'Air to Fakie',
-                'content' => 'Il s\'agit d\'une figure relativement simple, et plus précisément d\'un saut sans 
-                rotation qui se fait généralement dans un pipe (un U). Le rider s\'élance dans les airs et retombe 
-                dans le sens inverse.',
+                'content' => 'Il s\'agit d\'une figure relativement simple, et plus précisément d\'un saut sans rotation qui se fait généralement dans un pipe (un U). Le rider s\'élance dans les airs et retombe dans le sens inverse.',
                 'group' => '0',
             ],
             [
                 'name' => 'Underflip',
-                'content' => 'Le frontside underflip 540 est une figure qui mêle un frontside 180 et 
-                un backflip. Ce trick peut paraître intimidant, mais il n\'est pas si compliqué. Hormis 
-                le décollage, bien sûr. Ensuite, les mouvements peuvent s\'enchaîner assez naturellement.',
+                'content' => 'Le frontside underflip 540 est une figure qui mêle un frontside 180 et un backflip. Ce trick peut paraître intimidant, mais il n\'est pas si compliqué. Hormis le décollage, bien sûr. Ensuite, les mouvements peuvent s\'enchaîner assez naturellement.',
                 'group' => '1',
             ],
             [
                 'name' => 'Wildcat/Backflip',
-                'content' => 'Aussi appelé backflip, le wildcat est un salto arrière que le rider effectue dans les airs
-                 après avoir pris de la vitesse. C\'est un trick qui peut être difficile à réaliser puisque le 
-                 snowboardeur doit veiller à rester dans le bon axe.',
+                'content' => 'Aussi appelé backflip, le wildcat est un salto arrière que le rider effectue dans les airs après avoir pris de la vitesse. C\'est un trick qui peut être difficile à réaliser puisque le snowboardeur doit veiller à rester dans le bon axe.',
                 'group' => '1',
             ],
             [
                 'name' => 'Rodeoback / Rodeofront',
-                'content' => 'C\'est une figure qui consiste à faire un salto arrière en y ajoutant une rotation 
-                d\'un demi-tour. Le rodeo est back quand le snowboarder part de dos et front quand il part de face.',
+                'content' => 'C\'est une figure qui consiste à faire un salto arrière en y ajoutant une rotation d\'un demi-tour. Le rodeo est back quand le snowboarder part de dos et front quand il part de face.',
                 'group' => '1',
             ],
             [
                 'name' => 'Mc Twist',
-                'content' => 'Le Mc Twist est un flip (rotation verticale) agrémenté d\'une vrille. Un saut plutôt 
-                périlleux réservé aux riders les plus confirmés. Le champion Shaun White s\'est illustré par un Double 
-                Mc Twist 1260 lors de sa session de Half-Pipe aux Jeux Olympiques de Vancouver en 2010.',
+                'content' => 'Le Mc Twist est un flip (rotation verticale) agrémenté d\'une vrille. Un saut plutôt périlleux réservé aux riders les plus confirmés. Le champion Shaun White s\'est illustré par un Double Mc Twist 1260 lors de sa session de Half-Pipe aux Jeux Olympiques de Vancouver en 2010.',
                 'group' => '1',
             ],
         ];
@@ -117,7 +101,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
                 ->setTrickCategory(
                     $this->getReference(TrickCategoryFixtures::TRICKCATEGORY_REFFERENCE[$tricksList[$i]['group']])
                 )
-                ->setAuthor($this->getReference(UserFixtures::USER_REFERENCE))
+                ->setAuthor($this->getReference(UserFixtures::USER_REFERENCE[array_rand(UserFixtures::USER_REFERENCE)]))
                 ->setContent($tricksList[$i]['content'])
                 ->setCreatedAt(new \DateTime($date));
 
