@@ -3,5 +3,20 @@
 {% block title %}SnowTrick - Apprendre et partager !{% endblock %}
 
 {% block body %}
-    Accueil
+    <header class="tricks-header"
+            style="background: url('{{ asset('images/home-background.jpg') }}') no-repeat; background-size: cover;">
+        <h1 class="text-center">Bienvenue sur SnowTricks<br>
+            <span style="display: block; font-size: 0.5em;">Le site de partage de figures !</span>
+        </h1>
+
+        <div class="position-relative bottom-0 mt-2 p-2 bg-dark rounded">
+            <a href="{{ path('app_tricks') }}" class="btn btn-outline-light">Voir les tricks</a>
+            {% if not app.user %}
+                <a href="{{ path('security_registration') }}" class="btn btn-outline-light">S'inscrire</a>
+                <a href="{{ path('security_login') }}" class="btn btn-outline-light">Se connecter</a>
+            {% else %}
+                <a href="{{ path('security_logout') }}" class="btn btn-outline-light">Déconnexion</a>
+            {% endif %}
+        </div>
+    </header>
 {% endblock %}
