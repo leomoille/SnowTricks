@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor Visiteur as v
+
+entity "Serveur Web" as sw
+
+database "Base de\ndonnées" as db
+
+v -> sw : S'inscrire
+sw -> db : Verifier si l'utilisateur existe
+alt Si l'utilisateur n'existe pas
+    db --> sw : Utlisateur non existant
+    sw -> db : Préinscrire l'utilisateur
+    db --> sw : Utilisateur préinscrit
+    sw --> v : Envoyer un mail d'activation
+    v -> sw : Utilise lien d'activation
+    sw -> db : Activer l'utilisateur
+    db --> sw : Utilisateur activé
+    sw --> v : Utilisateur activé
+else Si l'utilisateur existe
+    db --> sw : Utlisateur existant
+    sw --> v : Erreur : utilisateur déjà inscrit
+end
+
+@enduml

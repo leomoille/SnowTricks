@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor Visiteur as v
+
+entity "Serveur Web" as sw
+
+database "Base de\ndonnées" as db
+
+v -> sw : Se connecter
+sw -> db : Verifier l'identifiant et le mot de passe
+
+alt Si l'utilisateur correspond à un utilisateur de la base de données
+    db --> sw : Utilisateur trouvé
+    sw --> v : Connecté
+else Si l'utilisateur ne correspond à aucun utilisateur de la base de données
+    db --> sw : Aucun utilisateur trouvé
+    sw --> v : Erreur
+end
+@enduml

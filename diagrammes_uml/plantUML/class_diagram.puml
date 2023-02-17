@@ -1,0 +1,54 @@
+@startuml
+'https://plantuml.com/class-diagram
+'left to right direction
+class User {
+    username : String
+    password : String
+    email : String
+    avatar : String
+    role : String
+    isActivated : Bool
+    activationToken : String
+    resetToken : String
+
+}
+
+class Message {
+    content : String
+    publicationDate : DateTime
+}
+
+class Trick {
+    name : String
+    content : String
+    slug : String
+    createdAt : DateTime
+    updateAt : DateTime
+
+}
+
+class Image {
+    name : String
+    isFeatured: String
+}
+
+class Video {
+    url : String
+}
+
+class TrickCategory {
+    name : String
+    slug : String
+}
+
+User "1" ---o "0..*" Trick
+Trick "0..*" ---o "1" TrickCategory
+Trick "1" ---* "0..*" Image
+Trick "1" ---* "0..*" Video
+User "1" ---o "0..*" Message
+Message "0..*" ---* "1" Trick
+Image -[hidden]> TrickCategory
+User -[hidden]> TrickCategory
+
+''' Ajouter une class pour les Images et une pour les vidéos
+@enduml

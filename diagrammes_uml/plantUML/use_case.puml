@@ -1,0 +1,40 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+left to right direction
+
+title Diagramme de cas d'utilisation
+
+Utilisateur as u
+Visiteur as v
+
+u -|> v
+
+(Ajouter une figure) as (addTrick)
+(Modifier une figure) as (modifyTrick)
+(Supprimer une figure) as (deleteTrick)
+(Ajouter un message) as (addMessage)
+(Se connecter) as (login)
+(S'inscrire) as (register)
+(Valider son compte) as (validateAccount)
+(Se déconnecter) as (logout)
+(Modifier son mot de passe) as (modifyPassword)
+(Récupérer son mot de passe) as (forgotPassword)
+(Changer de photo de profil) as (changeProfilePicture)
+
+''''Visitor''''
+v --[#blue] (login)
+v --[#blue] (register)
+v --[#blue] (forgotPassword)
+(validateAccount) .> (register) : extends
+
+''''User''''
+u --[#green] (addTrick)
+u --[#green] (modifyTrick)
+u --[#green] (addMessage)
+u --[#green] (modifyPassword)
+u --[#green] (changeProfilePicture)
+u --[#green] (logout)
+u --[#green] (deleteTrick)
+
+@enduml
