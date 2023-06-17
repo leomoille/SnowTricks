@@ -54,7 +54,7 @@ class SecurityController extends AbstractController
             );
 
             $email = (new TemplatedEmail())
-                ->from('no-reply@snowtricks.dev')
+                ->from('no-reply@leomoille.com')
                 ->to($user->getEmail())
                 ->subject('Activation du compte')
                 ->htmlTemplate('email/account_activation.html.twig')
@@ -145,7 +145,7 @@ class SecurityController extends AbstractController
                 );
 
                 $email = (new TemplatedEmail())
-                    ->from('no-reply@snowtricks.dev')
+                    ->from('no-reply@leomoille.com')
                     ->to($user->getEmail())
                     ->subject('Réinitialisation de mot de passe')
                     ->htmlTemplate('email/password_recovery.html.twig')
