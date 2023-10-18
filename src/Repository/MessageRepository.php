@@ -36,7 +36,6 @@ class MessageRepository extends ServiceEntityRepository
         return new Paginator($query);
     }
 
-
     public function add(Message $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
@@ -44,7 +43,6 @@ class MessageRepository extends ServiceEntityRepository
             $this->_em->flush();
         }
     }
-
 
     public function remove(Message $entity, bool $flush = true): void
     {

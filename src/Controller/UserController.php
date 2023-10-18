@@ -22,9 +22,7 @@ class UserController extends AbstractController
         $this->slugger = $slugger;
     }
 
-    /**
-     * @Route("/user", name="app_user")
-     */
+    #[Route('/user', name: 'app_user')]
     public function index(Request $request, EntityManagerInterface $manager, Filesystem $filesystem): Response
     {
         $form = $this->createForm(AvatarType::class, $this->getUser());
