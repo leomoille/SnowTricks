@@ -18,7 +18,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MessageRepository extends ServiceEntityRepository
 {
-
     public const PAGINATOR_PER_PAGE = 10;
 
     public function __construct(ManagerRegistry $registry)
@@ -38,7 +37,6 @@ class MessageRepository extends ServiceEntityRepository
 
         return new Paginator($query);
     }
-
 
     /**
      * @throws ORMException

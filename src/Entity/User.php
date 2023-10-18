@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ *
  * @UniqueEntity(
  *     fields={"email"},
  *     message="L'email que vous avez indiqué est déjà utilisée."
@@ -26,12 +27,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Id
+     *
      * @ORM\GeneratedValue
+     *
      * @ORM\Column(type="integer")
      */
     private $id;
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     *
      * @Assert\Email()
      */
     private $email;
@@ -43,6 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      *
      * @ORM\Column(type="string")
+     *
      * @Assert\Length(min="8", minMessage="Votre mot de passe doit contenir au minimum 8 caractères")
      */
     private string $password;

@@ -13,13 +13,16 @@ class Message
 {
     /**
      * @ORM\Id
+     *
      * @ORM\GeneratedValue
+     *
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
+     *
      * @Assert\NotBlank
      */
     private $content;
@@ -31,12 +34,14 @@ class Message
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="messages")
+     *
      * @ORM\JoinColumn(nullable=false)
      */
     private $trick;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="messages")
+     *
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;

@@ -12,7 +12,9 @@ class Video
 {
     /**
      * @ORM\Id
+     *
      * @ORM\GeneratedValue
+     *
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -24,6 +26,7 @@ class Video
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="video")
+     *
      * @ORM\JoinColumn(nullable=false)
      */
     private $trick;

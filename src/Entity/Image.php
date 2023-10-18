@@ -12,7 +12,9 @@ class Image
 {
     /**
      * @ORM\Id
+     *
      * @ORM\GeneratedValue
+     *
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -24,6 +26,7 @@ class Image
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="image")
+     *
      * @ORM\JoinColumn(nullable=false)
      */
     private $trick;
