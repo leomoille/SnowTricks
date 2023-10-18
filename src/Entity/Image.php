@@ -8,30 +8,23 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=ImageRepository::class)
  */
+#[ORM\Entity(repositoryClass: ImageRepository::class)]
 class Image
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="image")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $trick;
+    #[ORM\ManyToOne(targetEntity: Trick::class, inversedBy: 'image')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Trick $trick;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $isFeatured;
+    #[ORM\Column(nullable: true)]
+    private ?bool $isFeatured = null;
 
     public function getId(): ?int
     {

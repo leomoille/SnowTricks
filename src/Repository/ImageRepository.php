@@ -4,8 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Image;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -24,10 +22,6 @@ class ImageRepository extends ServiceEntityRepository
         $this->imagePath = $path;
     }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
     public function add(Image $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
@@ -36,10 +30,6 @@ class ImageRepository extends ServiceEntityRepository
         }
     }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
     public function remove(Image $entity, bool $flush = true): void
     {
         if ('trick-placeholder.jpg' !== $entity->getName() && 'trick-placeholder-2.jpg' !== $entity->getName()) {
@@ -50,33 +40,4 @@ class ImageRepository extends ServiceEntityRepository
             }
         }
     }
-
-    // /**
-    //  * @return Image[] Returns an array of Image objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Image
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
