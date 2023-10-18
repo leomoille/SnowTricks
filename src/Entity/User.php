@@ -9,83 +9,49 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- *
- * @UniqueEntity(
- *     fields={"email"},
- *     message="L'email que vous avez indiqué est déjà utilisée."
- * )
- * @UniqueEntity(
- *     fields={"username"},
- *     message="Ce pseudo est déjà utilisé."
- * )
- */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: ['email'], message: 'L\'email que vous avez indiqué est déjà utilisée.')]
+#[UniqueEntity(fields: ['username'], message: 'Ce pseudo est déjà utilisé.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ORM\Id
-     *
-     * @ORM\GeneratedValue
-     *
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     *
-     * @Assert\Email()
-     */
-    private $email;
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(length: 180, unique: true)]
+    private ?string $email = null;
+
+    #[ORM\Column]
     private array $roles = [];
+
     /**
      * @var string The hashed password
-     *
-     * @ORM\Column(type="string")
-     *
-     * @Assert\Length(min="8", minMessage="Votre mot de passe doit contenir au minimum 8 caractères")
      */
-    private string $password;
+    #[ORM\Column]
+    private ?string $password = null;
 
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
-    private $resetToken;
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $resetToken;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     */
-    private $username;
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $username = null;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isActivated;
+    #[ORM\Column(type: 'boolean')]
+    private ?bool $isActivated = false;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $activationToken;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $activationToken;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="author", orphanRemoval=true)
-     */
-    private $tricks;
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Trick::class, orphanRemoval: true)]
+    private Collection $tricks;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="author", orphanRemoval=true)
-     */
-    private $messages;
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Message::class, orphanRemoval: true)]
+    private Collection $messages;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $avatar;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $avatar;
 
     public function __construct()
     {
@@ -190,7 +156,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getResetToken(): ?string
     {

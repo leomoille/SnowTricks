@@ -5,31 +5,20 @@ namespace App\Entity;
 use App\Repository\VideoRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=VideoRepository::class)
- */
+#[ORM\Entity(repositoryClass: VideoRepository::class)]
 class Video
 {
-    /**
-     * @ORM\Id
-     *
-     * @ORM\GeneratedValue
-     *
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $url;
+    #[ORM\Column(type: 'string', length: 255)]
+    private ?string $url;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="video")
-     *
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $trick;
+    #[ORM\ManyToOne(targetEntity: Trick::class, inversedBy: 'video')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Trick $trick;
 
     public function getId(): ?int
     {

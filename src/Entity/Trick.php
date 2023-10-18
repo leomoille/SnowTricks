@@ -9,82 +9,48 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=TrickRepository::class)
- *
- * @UniqueEntity(
- *     fields = "name",
- *     message = "{{ value }} existe déjà !"
- * )
- */
+#[ORM\Entity(repositoryClass: TrickRepository::class)]
+#[UniqueEntity(fields: 'name', message: '{{ value }} existe déjà !')]
 class Trick
 {
-    /**
-     * @ORM\Id
-     *
-     * @ORM\GeneratedValue
-     *
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     *
-     * @Assert\NotBlank
-     */
-    private $name;
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[Assert\NotBlank]
+    private ?string $name;
 
-    /**
-     * @ORM\Column(type="text", name="content")
-     *
-     * @Assert\NotBlank
-     */
-    private $content;
+    #[ORM\Column(name: 'content', type: 'text')]
+    #[Assert\NotBlank]
+    private ?string $content;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
-     */
-    private $image;
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Image::class, cascade: ['persist'], orphanRemoval: true)]
+    private Collection $image;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
-     */
-    private $video;
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, cascade: ['persist'], orphanRemoval: true)]
+    private Collection $video;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="trick")
-     */
-    private $messages;
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Message::class)]
+    private Collection $messages;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=TrickCategory::class, inversedBy="tricks")
-     *
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $trickCategory;
+    #[ORM\ManyToOne(targetEntity: TrickCategory::class, inversedBy: 'tricks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?TrickCategory $trickCategory;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $createdAt;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     */
-    private $slug;
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    private ?string $slug;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tricks")
-     *
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $author;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tricks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $author;
 
-    /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
-    private $updatedAt;
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $updatedAt;
 
     public function __construct()
     {

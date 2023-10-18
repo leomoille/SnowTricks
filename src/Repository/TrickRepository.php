@@ -35,10 +35,6 @@ class TrickRepository extends ServiceEntityRepository
         return new Paginator($query);
     }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
     public function add(Trick $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
@@ -47,10 +43,6 @@ class TrickRepository extends ServiceEntityRepository
         }
     }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
     public function remove(
         Trick $entity,
         MessageRepository $messageRepository,
@@ -84,33 +76,4 @@ class TrickRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-    // /**
-    //  * @return Trick[] Returns an array of Trick objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Trick
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

@@ -7,34 +7,22 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=TrickCategoryRepository::class)
- */
+#[ORM\Entity(repositoryClass: TrickCategoryRepository::class)]
 class TrickCategory
 {
-    /**
-     * @ORM\Id
-     *
-     * @ORM\GeneratedValue
-     *
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private $name;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="trickCategory")
-     */
-    private $tricks;
+    #[ORM\OneToMany(mappedBy: 'trickCategory', targetEntity: Trick::class)]
+    private Collection $tricks;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     */
-    private $slug;
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    private ?string $slug;
 
     public function __construct()
     {
