@@ -20,7 +20,7 @@ class Message
     private ?string $content;
 
     #[ORM\Column(nullable: true)]
-    private \DateTime $publicationDate;
+    private ?\DateTimeInterface $publicationDate;
 
     #[ORM\ManyToOne(targetEntity: Trick::class, inversedBy: 'messages')]
     #[ORM\JoinColumn(nullable: false)]
