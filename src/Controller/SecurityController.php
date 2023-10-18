@@ -20,9 +20,7 @@ use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class SecurityController extends AbstractController
 {
-    /**
-     * @Route("/inscription", name="security_registration")
-     */
+    #[Route('/inscription', name: 'security_registration"')]
     public function registration(
         Request $request,
         EntityManagerInterface $manager,
@@ -74,9 +72,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/inscription/{token}", name="security_activate_account")
-     */
+    #[Route('/inscription/{token}', name: 'security_activate_account"')]
     public function activateAccount(
         string $token,
         UserRepository $userRepository,
@@ -100,9 +96,7 @@ class SecurityController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
-    /**
-     * @Route("/connexion", name="security_login")
-     */
+    #[Route('/connexion', name: 'security_login"')]
     public function login(): Response
     {
         return $this->render('security/login.html.twig');
@@ -115,9 +109,7 @@ class SecurityController extends AbstractController
     {
     }
 
-    /**
-     * @Route("/mot-de-passe-oublie", name="security_forgot_password")
-     */
+    #[Route('/mot-de-passe-oublie', name: 'security_forgot_password"')]
     public function forgotPassword(
         Request $request,
         MailerInterface $mailer,
@@ -175,9 +167,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/mot-de-passe-oublie/{token}", name="security_reset_password")
-     */
+    #[Route('/mot-de-passe-oublie/{token}', name: 'security_reset_password"')]
     public function resetPassword(
         string $token,
         Request $request,

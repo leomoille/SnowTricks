@@ -29,9 +29,7 @@ class TrickController extends AbstractController
         $this->slugger = $slugger;
     }
 
-    /**
-     * @Route("/tricks", name="app_tricks")
-     */
+    #[Route('/tricks', name: 'app_tricks')]
     public function tricks(Request $request, TrickRepository $trickRepository): Response
     {
         $offset = max(0, $request->query->getInt('offset', 0));
@@ -47,9 +45,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/tricks/{slug}", name="app_trick")
-     */
+    #[Route('/tricks/{slug}', name: 'app_trick')]
     public function trick(
         Request $request,
         Trick $trick,
@@ -94,9 +90,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/tricks/{slug}/editer", name="app_edit_trick", methods={"GET", "POST"})
-     */
+    #[Route('/tricks/{slug}/editer', name: 'app_edit_trick', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         Trick $trick,
@@ -145,9 +139,7 @@ class TrickController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/trick/ajouter", name="app_add_trick")
-     */
+    #[Route('/trick/ajouter', name: 'app_add_trick')]
     public function add(Request $request, EntityManagerInterface $manager, TrickImageUploader $imageUploader): Response
     {
         $trick = new Trick();
@@ -183,9 +175,7 @@ class TrickController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/trick/supprimer/{slug}", name="app_remove_trick")
-     */
+    #[Route('/trick/supprimer/{slug}', name: 'app_remove_trick')]
     public function delete(
         Trick $trick,
         TrickRepository $trickRepository,
