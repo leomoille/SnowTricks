@@ -1,57 +1,70 @@
 # SnowTricks
 
+> Dépot ouvert originalement lors de mon cursus de développeur backend PHP / Symfony chez OpenClassrooms.  
+> Le derniers commit publié lors de mes études : [b739e752ac0556ba73f218b578f42f3b02556101](https://github.com/leomoille/SnowTricks/commit/0e1e231fb126fcc1dbd4259d4e34db4cd59b899f)
+
+Les commits suivants sont des améliorations et mises à jours hors du cadre de mon parcours.
+
 ## Prérequis
+
 Pour pouvoir mettre en place SnowTricks vous aurez besoin des outils suivants : 
-- PHP 7.4
+
+- PHP 8.2
 - Composer
 - NodeJS (et npm)
-- Un mail catcher (comme [MailHog](https://github.com/mailhog/MailHog) par exemple)
+- Symfony CLI
+- Docker
 
-## 1 - Installer les dépendances
+## 1 - Installer les dépendances PHP
+
 Depuis un terminal dans le dossier du projet, lancez la commande suivante :
 
 ```shell
-$ composer install
+composer install
 ```
 
-## 2 - Connecter la base de données
-Une fois `composer install` lancé, éditez le fichier `.env` pour y ajouter la configuration à la base de données.
-> Par défaut, le fichier `.env` est configuré pour *MySQL* avec l'utilisateur *root* sans mot de passe. La base de données sera nommée *snowtricks*.
-```dotenv
-DATABASE_URL="mysql://root:@localhost:3306/snowtricks"
-```
+## 2 - Installation des dépendances JS
 
-## 3 - Configurer la base de données
-Une fois le fichier `.env` configuré, lancez la commande suivante pour initialiser la base de données :
-```shell
-$ php bin/console doctrine:database:create
-```
-
-Maintenant que la base de données est créée, vous pouvez lancer les fixtures :
-```shell
-$ php bin/console doctrine:fixtures:load
-```
-
-## 4 - Lancer le serveur
-Vous pouvez maintenant lancer la commande suivante pour mettre en place le CSS et le Javascript : 
+Depuis un terminal dans le dossier du projet, lancez la commande suivante :
 
 ```shell
-$ npm run build
+npm install
 ```
 
-Puis le serveur Web de *Symfony* : 
+## 3 - Démarrer le container Docker
+
+Démarrez le container contenant la base de données, le mail catcher ainsi qu'un phpMyAdmin
 
 ```shell
-$ php bin/console server:start
+docker compose up -d
+```
+
+## 4 - Charger les fixtures
+
+Depuis un terminal dans le dossier du projet, lancez la commande suivante :
+
+```shell
+symfony console d:f:l -n
+```
+
+## 5 - Build des assets
+
+Depuis un terminal dans le dossier du projet, lancez la commande suivante :
+
+```shell
+npm run build
+```
+
+## 5 - Démarrer le serveur local
+
+Depuis un terminal dans le dossier du projet, lancez la commande suivante :
+
+```shell
+symfony serve -d
 ```
 
 ## 5 - Découvrir SnowTricks !
 
-Une fois le serveur lancé, vous pouvez vous rendre sur [127.0.0.1](http://127.0.0.1) pour naviguer sur le site.
+Une fois le serveur démaré, vous pouvez vous rendre sur [127.0.0.1](http://127.0.0.1) pour naviguer sur le site.
 
-## Autres points
-Il est possible que vous ayez à configurer un *mail catcher* pour recevoir les mails d'activations de comptes ou de modification de mot de passe.
-Vous pouvez configurer les paramètres du mailer dans le fichier `.env` :
-```dotenv
-MAILER_DSN=smtp://localhost:1025
-```
+> Par défaut, le serveur écoute sur le port `8000` mais si ce dernier est indisponible le port sera différent. Consultez l'output du terminal pour connaitre le port utilisé.
