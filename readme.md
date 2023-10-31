@@ -63,8 +63,8 @@ Depuis un terminal dans le dossier du projet, lancez la commande suivante :
 symfony serve -d
 ```
 
-## 5 - Découvrir SnowTricks !
+## 6 - Découvrir SnowTricks !
 
-Une fois le serveur démaré, vous pouvez vous rendre sur [127.0.0.1](http://127.0.0.1) pour naviguer sur le site.
+Une fois le serveur démarré, vous pouvez vous rendre sur [127.0.0.1](http://127.0.0.1) pour naviguer sur le site.
 
 > Par défaut, le serveur écoute sur le port `8000` mais si ce dernier est indisponible le port sera différent. Consultez l'output du terminal pour connaitre le port utilisé.
