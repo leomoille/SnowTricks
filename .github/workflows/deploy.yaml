@@ -31,8 +31,10 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd ${{APP_PATH}}
+            cd ${{ secrets.APP_PATH }}
+            git reset --hard origin/main
             git pull
+
       - name: Install Composer dependencies
         uses: appleboy/ssh-action@master
         with:
@@ -40,8 +42,9 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd ${{APP_PATH}}
+            cd ${{ secrets.APP_PATH }}
             composer install --no-dev --optimize-autoloader
+
       - name: Build assets
         uses: appleboy/ssh-action@master
         with:
@@ -49,12 +52,13 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd ${{APP_PATH}}
+            cd ${{ secrets.APP_PATH }}
             export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm use 16
             npm install
             npm run build
+
       - name: Clear cache
         uses: appleboy/ssh-action@master
         with:
@@ -62,8 +66,9 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd ${{APP_PATH}}
+            cd ${{ secrets.APP_PATH }}
             php bin/console cache:clear --env=prod
+
       - name: Execute Doctrine migrations
         uses: appleboy/ssh-action@master
         with:
@@ -71,5 +76,5 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd ${{APP_PATH}}
+            cd ${{ secrets.APP_PATH }}
             php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
