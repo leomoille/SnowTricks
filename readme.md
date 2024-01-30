@@ -1,7 +1,7 @@
 # SnowTricks
 
 > Dépot ouvert originalement lors de mon cursus de développeur backend PHP / Symfony chez OpenClassrooms.  
-> Le derniers commit publié lors de mes études : [b739e752ac0556ba73f218b578f42f3b02556101](https://github.com/leomoille/SnowTricks/commit/0e1e231fb126fcc1dbd4259d4e34db4cd59b899f)
+> Le dernier commit publié lors de mes études : [b739e752ac0556ba73f218b578f42f3b02556101](https://github.com/leomoille/SnowTricks/commit/0e1e231fb126fcc1dbd4259d4e34db4cd59b899f)
 
 Les commits suivants sont des améliorations et mises à jours hors du cadre de mon parcours.
 
